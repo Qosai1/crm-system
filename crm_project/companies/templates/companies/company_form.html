@@ -1,0 +1,39 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Company</title>
+
+    <link rel="stylesheet" href="{% static 'companies/style.css' %}">
+</head>
+<body>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>Add Company</h1>
+        </div>
+
+        <div class="form-card">
+            <form method="POST">
+                {% csrf_token %}
+
+                {{ form.as_p }}
+
+                <div class="form-actions">
+                    <a href="{% url 'company_list' %}" class="btn-cancel">
+                        Cancel
+                    </a>
+
+                    <button type="submit" class="btn-save">
+                        Save Company
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

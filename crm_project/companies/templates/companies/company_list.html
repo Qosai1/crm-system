@@ -1,0 +1,77 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Companies | CRM</title>
+
+    <link rel="stylesheet" href="{% static 'companies/style.css' %}">
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="page-header">
+            <div>
+                <h1>Companies</h1>
+            </div > 
+
+            
+<div class="header-actions">
+    <form method="GET" action="{% url 'company_list' %}" class="search-form">
+        <input
+            type="search"
+            name="q"
+            placeholder="Search companies..."
+            value="{{ request.GET.q }}"
+            oninput="this.form.requestSubmit()"
+        >
+    </form>
+
+    <a href="{% url 'addcompany' %}" class="btn-primary">
+        + Add Company
+    </a>
+</div>
+
+            
+        </div>
+
+        <div class="table-card">
+            {% if companies %}
+                <table class="companies-table">
+                    <thead>
+                        <tr>
+                            <th>Company Name</th>
+                            <th>Industry</th>
+                            <th>City</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for company in companies %}
+                            <tr>
+                                <td>{{ company.name }}</td>
+                                <td>{{ company.industry|default:"—" }}</td>
+                                <td>{{ company.city }}</td>
+                                <td>{{ company.phone|default:"—" }}</td>
+                                <td>{{ company.email|default:"—" }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="empty-message">
+                    <p>No companies found.</p>
+                    <p>Add your first company to get started.</p>
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+
+</body>
+</html>

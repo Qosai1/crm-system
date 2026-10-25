@@ -1,0 +1,214 @@
+
+*{
+    box-sizing: border-box;
+}
+
+body{
+    margin: 0;
+    font-family: Arial,sans-serif;
+    background-color: #f5f7fb;
+    color: #1f2937;
+}
+
+.container{
+    margin: 24px auto;
+    padding: 0 14px;
+}
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+     text-transform: uppercase;
+   
+}
+.page-header h1{
+    font-size: 25px;
+}
+.companies-table th,
+.companies-table td{
+    padding: 12px;
+}
+.btn-primary{
+    display: inline-block;
+    padding: 12px 18px;
+    margin: 12px;
+    background-color: #2563eb;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 14px;
+   
+}
+.btn-primary:hover {
+    background-color: #1d4ed8;
+}
+
+.table-card {
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    overflow-x: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.companies-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+.companies-table tbody td:first-child {
+    font-weight: bold;
+}
+
+.companies-table th {
+    padding: 16px;
+    background-color: #f9fafb;
+    color: #141414;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.companies-table td {
+    padding: 16px;
+    border-bottom: 1px solid #f0f2f5;
+    font-size: 14px;
+}
+
+.companies-table tbody tr:hover {
+    background-color: #f9fafb;
+}
+
+.companies-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.empty-message {
+    padding: 40px 20px;
+    text-align: center;
+    color: #6b7280;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-left: auto;
+}
+
+/* Search form */
+.search-form {
+    margin: 0;
+}
+
+/* Search input */
+.search-form input {
+    width: 260px;
+    padding: 12px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #1f2937;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-form input::placeholder {
+    color: #9ca3af;
+}
+
+.search-form input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+
+/* Add Company Form */
+
+.form-card {
+    background: #ffffff;
+    padding: 32px;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.form-card form p {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0 0 22px;
+}
+
+.form-card form p label {
+    color: #374151;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.form-card form p input,
+.form-card form p select,
+.form-card form p textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #1f2937;
+    font: inherit;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-card form p input:focus,
+.form-card form p select:focus,
+.form-card form p textarea:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 28px;
+    padding-top: 24px;
+  
+}
+
+.form-actions .btn-cancel {
+    display: inline-block;
+    padding: 12px 18px;
+    margin: 12px;
+    background-color: #5787f0;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.btn-cancel:hover {
+    background: #102142;
+}
+
+.form-actions .btn-save {
+    display: inline-block;
+    padding: 12px 18px;
+    margin: 12px;
+    background-color: #2563eb;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+}
+.btn-save:hover {
+    background: #102142;
+}
+
