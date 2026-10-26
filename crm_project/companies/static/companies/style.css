@@ -30,6 +30,7 @@ body{
 .companies-table td{
     padding: 12px;
 }
+
 .btn-primary{
     display: inline-block;
     padding: 12px 18px;
@@ -98,6 +99,8 @@ body{
     gap: 12px;
     margin-left: auto;
 }
+
+
 
 /* Search form */
 .search-form {
@@ -181,7 +184,7 @@ body{
   
 }
 
-.form-actions .btn-cancel {
+.btn-cancel {
     display: inline-block;
     padding: 12px 18px;
     margin: 12px;
@@ -197,7 +200,7 @@ body{
     background: #102142;
 }
 
-.form-actions .btn-save {
+.btn-save {
     display: inline-block;
     padding: 12px 18px;
     margin: 12px;
@@ -210,5 +213,156 @@ body{
 }
 .btn-save:hover {
     background: #102142;
+}
+
+
+/* Center and limit the Company Form */
+
+.form-card {
+    width: 100%;
+    max-width: 650px;
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+
+/* Center the form page content */
+
+.container:has(.form-card) {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 24px;
+}
+
+/* Keep the page title aligned with the form */
+
+.container:has(.form-card) .page-header {
+    max-width: 650px;
+    margin: 0 auto 24px;
+}
+
+
+
+
+/* Company Delete Modal */
+
+.company-delete-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(15, 23, 42, 0.5);
+    backdrop-filter: blur(3px);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.company-delete-overlay.active {
+    display: flex;
+}
+
+.company-delete-card {
+    width: 100%;
+    max-width: 420px;
+    box-sizing: border-box;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    animation: companyDeleteAppear 0.2s ease-out;
+}
+
+.company-delete-icon {
+    width: 52px;
+    height: 52px;
+    margin: 0 auto 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #fef2f2;
+    color: #dc2626;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.company-delete-card h2 {
+    margin: 0 0 12px;
+    color: #111827;
+    font-size: 22px;
+}
+
+.company-delete-card p {
+    color: #4b5563;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.company-delete-warning {
+    color: #dc2626 !important;
+    font-size: 13px;
+}
+
+
+@keyframes companyDeleteAppear {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 420px) {
+    .company-delete-card {
+        padding: 24px 18px;
+    }
+
+    .company-delete-actions {
+        flex-direction: column-reverse;
+    }
+}
+
+
+ .btn-edit,
+ .btn-delete {
+    display: inline-flex ;
+    align-items: center;
+    justify-content: center;
+    width: 70px ;
+    min-width: 70px ;
+    height: 32px ;
+    box-sizing: border-box;
+    padding: 0 ;
+    margin: 0;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: Arial, sans-serif;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+ .btn-edit {
+    color: #1d4ed8;
+    background-color: #eff6ff;
+}
+
+ .btn-delete {
+    color: #dc2626;
+    background-color: #fee2e2;
+}
+
+ .btn-edit:hover {
+    background-color: #dbeafe;
+}
+
+ .btn-delete:hover {
+    background-color: #fecaca;
 }
 

@@ -26,7 +26,7 @@
             name="q"
             placeholder="Search companies..."
             value="{{ request.GET.q }}"
-            oninput="this.form.requestSubmit()"
+            
         >
     </form>
 
@@ -48,6 +48,7 @@
                             <th>City</th>
                             <th>Phone</th>
                             <th>Email</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
 
@@ -59,6 +60,20 @@
                                 <td>{{ company.city }}</td>
                                 <td>{{ company.phone|default:"—" }}</td>
                                 <td>{{ company.email|default:"—" }}</td>
+                                
+                                <td class="actions-cell">
+                                    <a href="{% url 'company_edit' company.id %}" class="btn-edit">
+                                        Edit
+                                    </a>
+                                
+                                    <button
+                                        type="button"
+                                        class="btn-delete"
+                                        onclick="openDeleteModal('{{ company.id }}', '{{ company.name|escapejs }}')">
+                                       Delete
+                                    </button>
+                                </td>
+
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -72,6 +87,107 @@
         </div>
 
     </div>
+    
+<div id="deleteModal" class="company-delete-overlay">
+    <div class="company-delete-card">
+        <div class="company-delete-icon">!</div>
+
+        <h2>Delete Company?</h2>
+
+        <p>
+            Are you sure you want to delete
+            <strong id="deleteCompanyName"></strong>?
+        </p>
+        <p class="company-delete-warning">This action cannot be undone.</p>
+
+        <form id="deleteForm" method="POST">
+            {% csrf_token %}
+
+            <div class="company-delete-actions">
+                <button
+                    type="button"
+                    class="btn-edit"
+                    onclick="closeDeleteModal()">
+                    Cancel
+                </button>
+
+                <button type="submit" class="btn-delete">
+                    Yes, Delete
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+    
+<script>
+    const searchInput = document.querySelector('.search-form input');
+    const searchForm = document.querySelector('.search-form');
+    let searchTimer;
+
+    searchInput.addEventListener('input', function () {
+        clearTimeout(searchTimer);
+
+        if (this.value.trim() === '') {
+            searchForm.requestSubmit();
+            return;
+        }
+
+        searchTimer = setTimeout(function () {
+            searchForm.requestSubmit();
+        }, 500);
+    });
+</script>
+
+<script>
+    function openDeleteModal(companyId, companyName) {
+        const modal = document.getElementById('deleteModal');
+        const companyNameElement = document.getElementById('deleteCompanyName');
+        const deleteForm = document.getElementById('deleteForm');
+
+        if (!modal || !companyNameElement || !deleteForm) {
+            console.error('Delete modal elements were not found.');
+            return;
+        }
+
+        // Display the selected company name
+        companyNameElement.textContent = companyName;
+
+        // Set the form action for the selected company
+        deleteForm.action = `/companies/${companyId}/delete/`;
+
+        // Open the modal
+        modal.classList.add('active');
+    }
+
+    function closeDeleteModal() {
+        const modal = document.getElementById('deleteModal');
+
+        if (modal) {
+            modal.classList.remove('active');
+        }
+    }
+
+    // Close modal when clicking outside its content
+    const deleteModal = document.getElementById('deleteModal');
+
+    if (deleteModal) {
+        deleteModal.addEventListener('click', function(event) {
+            if (event.target === deleteModal) {
+                closeDeleteModal();
+            }
+        });
+    }
+
+    // Close modal when pressing Escape
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeDeleteModal();
+        }
+    });
+</script>
 
 </body>
 </html>

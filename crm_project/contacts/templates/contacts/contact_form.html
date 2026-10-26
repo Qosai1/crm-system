@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if contact %}Edit Contact{% else %}Add Contact{% endif %}</title>
+
+    <link rel="stylesheet" href="{% static 'companies/style.css' %}">
+</head>
+<body>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>{% if contact %}Edit Contact{% else %}Add Contact{% endif %}</h1>
+        </div>
+
+        <div class="form-card">
+            <form method="POST">
+                {% csrf_token %}
+
+                {{ form.as_p }}
+
+                <div class="form-actions">
+                    <a href="{% url 'contact_list' %}" class="btn-cancel">
+                        Cancel
+                    </a>
+
+                    <button type="submit" class="btn-save">
+                        {% if contact %}Update Contact{% else %}Save Contact{% endif %}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
+```
