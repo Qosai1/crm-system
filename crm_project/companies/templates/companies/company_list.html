@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Companies | CRM</title>
+    <title>Companies</title>
 
     <link rel="stylesheet" href="{% static 'companies/style.css' %}">
 </head>
@@ -48,6 +48,7 @@
                             <th>City</th>
                             <th>Phone</th>
                             <th>Email</th>
+                            <th>Contacts</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -55,11 +56,17 @@
                     <tbody>
                         {% for company in companies %}
                             <tr>
-                                <td>{{ company.name }}</td>
+                                <td>
+                                  <a href="{% url 'company_detail' company.id %}" class="company-name-link">
+                                                      {{ company.name }}
+                                  </a>
+                                </td>
                                 <td>{{ company.industry|default:"—" }}</td>
                                 <td>{{ company.city }}</td>
                                 <td>{{ company.phone|default:"—" }}</td>
                                 <td>{{ company.email|default:"—" }}</td>
+                                <td>{{ company.contacts.count}} </td>
+
                                 
                                 <td class="actions-cell">
                                     <a href="{% url 'company_edit' company.id %}" class="btn-edit">
@@ -152,13 +159,10 @@
             return;
         }
 
-        // Display the selected company name
         companyNameElement.textContent = companyName;
 
-        // Set the form action for the selected company
         deleteForm.action = `/companies/${companyId}/delete/`;
 
-        // Open the modal
         modal.classList.add('active');
     }
 
@@ -170,7 +174,6 @@
         }
     }
 
-    // Close modal when clicking outside its content
     const deleteModal = document.getElementById('deleteModal');
 
     if (deleteModal) {
@@ -181,7 +184,6 @@
         });
     }
 
-    // Close modal when pressing Escape
     document.addEventListener('keydown', function(event) {
         if (event.key === 'Escape') {
             closeDeleteModal();

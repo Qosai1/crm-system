@@ -73,3 +73,14 @@ def company_delete(request, company_id):
     return render(request, 'companies/company_confirm_delete.html', {
         'company': company,
     })
+
+
+
+def company_detail(request, company_id):
+    company = get_object_or_404(Company, id=company_id)
+
+    context = {
+        'company': company,
+    }
+
+    return render(request,'companies/company_detail.html', context)

@@ -1,0 +1,180 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ company.name }}</title>
+    <link rel="stylesheet" href="{% static 'companies/style.css' %}">
+</head>
+<body>
+    <div class="container company-detail-page">
+
+        <a href="{% url 'company_list' %}" class="company-back-link">
+            ← All companies
+        </a>
+
+        <div class="company-profile-header">
+            <div class="company-profile-identity">
+                <div class="company-avatar">
+                    {{ company.name|slice:":2"|upper }}
+                </div>
+
+                <div>
+                    <h1>{{ company.name }}</h1>
+                    <p>
+                        {{ company.industry|default:"Company" }}
+                        
+                            · {{ company.city|default:"-" }}
+                          
+                       
+                    </p>
+                </div>
+            </div>
+
+            <div class="company-profile-actions">
+                <a href="{% url 'contact_create' %}" class="detail-action-btn">
+                    ＋ New contact
+                </a>
+
+                <button type="button" class="detail-action-btn">
+                    ＋ New deal
+                </button>
+
+                <a href="{% url 'company_edit' company.id %}"
+                   class="detail-action-btn">
+                    Edit
+                </a>
+
+                <button type="button"
+                        class="detail-action-btn detail-delete-btn">
+                    Delete
+                </button>
+            </div>
+        </div>
+
+        <div class="company-detail-layout">
+
+            <main class="company-detail-main">
+
+                <section class="company-stats-grid">
+                    <div class="company-stat-card">
+                        <span>Contacts</span>
+                        <strong>{{ company.contacts.count }}</strong>
+                    </div>
+
+                    <div class="company-stat-card">
+                        <span>Open deals</span>
+                        <strong>0</strong>
+                    </div>
+
+                    <div class="company-stat-card">
+                        <span>Open value</span>
+                        <strong>$0</strong>
+                    </div>
+
+                    <div class="company-stat-card">
+                        <span>Won value</span>
+                        <strong>$0</strong>
+                    </div>
+                </section>
+
+                <section class="company-detail-panel">
+                    <h2>
+                        Contacts
+                        <span>{{ company.contacts.count }}</span>
+                    </h2>
+
+                    {% for contact in company.contacts.all %}
+                        <div class="company-contact-row">
+                            <div>
+                                <strong>
+                                    <a href="{% url 'contact_detail' contact.id %}"
+                                       class="contact-name-link">
+                                        {{ contact.name|default:"-" }}
+                                    </a>
+                                </strong>
+                                    <small>{{ contact.email|default:"-" }}</small>
+                            </div>
+
+                            <span>
+                                {{ contact.job_title|default:"-" }}
+                            </span>
+                        </div>
+                    {% empty %}
+                        <p class="company-empty-state">
+                            No contacts associated with this company yet.
+                        </p>
+                    {% endfor %}
+                </section>
+
+                <section class="company-detail-panel">
+                    <h2>Deals <span>0</span></h2>
+
+                    <div class="company-placeholder-row">
+                        <div>
+                            <strong>Deals will appear here</strong>
+                            <span>Deal management is coming later</span>
+                        </div>
+                        <span>—</span>
+                    </div>
+                </section>
+
+            </main>
+
+            <aside class="company-detail-sidebar">
+
+                <section class="company-detail-panel">
+                    <h2>Details</h2>
+
+                    <div class="company-info-row">
+                        <span>Industry</span>
+                        <strong>{{ company.industry|default:"—" }}</strong>
+                    </div>
+
+                    <div class="company-info-row">
+                        <span>City</span>
+                        <strong>{{ company.city|default:"—" }}</strong>
+                    </div>
+                    <div class="company-info-row">
+                        <span>Address</span>
+                        <strong>{{ company.address|default:"—" }}</strong>
+                    </div>
+
+                    <div class="company-info-row">
+                        <span>Phone</span>
+                        <strong>{{ company.phone|default:"—" }}</strong>
+                    </div>
+
+                    <div class="company-info-row">
+                        <span>Email</span>
+                        <strong>
+                           
+                                <a href="mailto:{{ contact.email }}">
+                                    {{ company.email|default:"-" }}
+                                </a>
+                            
+                        </strong>
+                    </div>
+
+                    <div class="company-info-row">
+                        <span>Website</span>
+                        <strong>
+                           
+                                <a href="{{ company.website }}"
+                                   target="_blank"
+                                   rel="noopener noreferrer">
+                                    {{ company.website|default:"-" }}
+                               </a>
+                            
+                        </strong>
+                    </div>
+
+                </section>
+                
+            </aside>
+        </div>
+    </div>
+</body>
+</html>

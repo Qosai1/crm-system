@@ -1,0 +1,172 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ contact.name }}</title>
+
+    <link rel="stylesheet" href="{% static 'companies/style.css' %}">
+</head>
+
+<body>
+    <div class="container company-detail-page">
+
+        <a href="{% url 'contact_list' %}" class="company-back-link">
+            ← All contacts
+        </a>
+
+        <div class="company-profile-header">
+
+            <div class="company-profile-identity">
+                <div class="company-avatar">
+                    {{ contact.name|slice:":2"|upper }}
+                </div>
+
+                <div>
+                    <h1>{{ contact.name }}</h1>
+
+                    <p>
+                        {{ contact.job_title|default:"-" }}
+
+                        
+                            at
+                            <a href="{% url 'company_detail' contact.company.id %}">
+                                {{ contact.company.name }}
+                            </a>
+                      
+                    </p>
+                </div>
+            </div>
+
+            <div class="company-profile-actions">
+                <a href="{% url 'contact_edit' contact.id %}"
+                   class="detail-action-btn">
+                    Edit
+                </a>
+
+                <a href="{% url 'contact_delete' contact.id %}"
+                   class="detail-action-btn detail-delete-btn">
+                    Delete
+                </a>
+            </div>
+
+        </div>
+
+        <div class="company-detail-layout">
+
+            <main class="company-detail-main">
+
+                <!-- Statistics: Placeholder -->
+                <section class="company-stats-grid">
+
+                    <div class="company-stat-card">
+                        <span>Open deals</span>
+                        <strong>0</strong>
+                    </div>
+
+                    <div class="company-stat-card">
+                        <span>Open value</span>
+                        <strong>$0</strong>
+                    </div>
+
+                    <div class="company-stat-card">
+                        <span>Won value</span>
+                        <strong>$0</strong>
+                    </div>
+
+                    <div class="company-stat-card">
+                        <span>Open tasks</span>
+                        <strong>0</strong>
+                    </div>
+
+                </section>
+
+                <section class="company-detail-panel">
+                    <h2>Deals <span>0</span></h2>
+
+                    <div class="company-placeholder-row">
+                        <div>
+                            <strong>Deals will appear here</strong>
+                            <span>Deal management will be added later.</span>
+                        </div>
+
+                        <span>—</span>
+                    </div>
+                </section>
+
+                <section class="company-detail-panel">
+                    <h2>Tasks <span>0</span></h2>
+
+                    <div class="company-placeholder-row">
+                        <div>
+                            <strong>Tasks will appear here</strong>
+                            <span>Task management will be added later.</span>
+                        </div>
+
+                        <span>—</span>
+                    </div>
+                </section>
+
+            </main>
+
+            <aside class="company-detail-sidebar">
+
+                <section class="company-detail-panel">
+                    <h2>Details</h2>
+
+                    <div class="company-info-row">
+                        <span>Email</span>
+                        <strong>
+                           
+                                <a href="mailto:{{ contact.email }}">
+                                    {{ contact.email|default:"-" }}
+                                </a>
+                            
+                        </strong>
+                    </div>
+
+                    <div class="company-info-row">
+                        <span>Phone</span>
+                        <strong>{{ contact.phone|default:"—" }}</strong>
+                    </div>
+
+                    <div class="company-info-row">
+                        <span>Job title</span>
+                        <strong>{{ contact.job_title|default:"—" }}</strong>
+                    </div>
+
+                    <div class="company-info-row">
+                        <span>Company</span>
+                        <strong>
+                                <a href="{% url 'company_detail' contact.company.id %}">
+                                    {{ contact.company.name }}
+                                </a>
+                           
+                        </strong>
+                    </div>
+
+                    <div class="company-info-row">
+                        <span>Industry</span>
+                        <strong>
+                            {{ contact.company.industry|default:"—" }}
+                        </strong>
+                    </div>
+
+                    <div class="company-info-row">
+                        <span>City</span>
+                        <strong>
+                             {{ contact.company.city|default:"—" }}
+                          
+                        </strong>
+                    </div>
+
+                </section>
+
+
+            </aside>
+
+        </div>
+    </div>
+</body>
+</html>

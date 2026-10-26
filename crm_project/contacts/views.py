@@ -72,3 +72,15 @@ def contact_delete(request, contact_id):
 
     return redirect('contact_list')
 
+def contact_detail(request, contact_id):
+    contact = get_object_or_404(Contact, id=contact_id)
+
+    context = {
+        'contact': contact,
+    }
+
+    return render(
+        request,
+        'contacts/contact_detail.html',
+        context
+    )
