@@ -1,13 +1,14 @@
-
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ company.name }}</title>
     <link rel="stylesheet" href="{% static 'companies/style.css' %}">
 </head>
+
 <body>
     <div class="container company-detail-page">
 
@@ -25,10 +26,10 @@
                     <h1>{{ company.name }}</h1>
                     <p>
                         {{ company.industry|default:"Company" }}
-                        
-                            · {{ company.city|default:"-" }}
-                          
-                       
+
+                        · {{ company.city|default:"-" }}
+
+
                     </p>
                 </div>
             </div>
@@ -38,17 +39,15 @@
                     ＋ New contact
                 </a>
 
-                <button type="button" class="detail-action-btn">
+                <a href="{% url 'deal_create' %}?company={{ company.id }}" class="detail-action-btn">
                     ＋ New deal
-                </button>
+                </a>
 
-                <a href="{% url 'company_edit' company.id %}"
-                   class="detail-action-btn">
+                <a href="{% url 'company_edit' company.id %}" class="detail-action-btn">
                     Edit
                 </a>
 
-                <button type="button"
-                        class="detail-action-btn detail-delete-btn">
+                <button type="button" class="detail-action-btn detail-delete-btn">
                     Delete
                 </button>
             </div>
@@ -66,17 +65,17 @@
 
                     <div class="company-stat-card">
                         <span>Open deals</span>
-                        <strong>0</strong>
+                        <strong>{{ open_deals_count }}</strong>
                     </div>
 
                     <div class="company-stat-card">
                         <span>Open value</span>
-                        <strong>$0</strong>
+                        <strong>${{ open_deals_value }}</strong>
                     </div>
 
                     <div class="company-stat-card">
                         <span>Won value</span>
-                        <strong>$0</strong>
+                        <strong>${{ won_deals_value}}</strong>
                     </div>
                 </section>
 
@@ -87,38 +86,46 @@
                     </h2>
 
                     {% for contact in company.contacts.all %}
-                        <div class="company-contact-row">
-                            <div>
-                                <strong>
-                                    <a href="{% url 'contact_detail' contact.id %}"
-                                       class="contact-name-link">
-                                        {{ contact.name|default:"-" }}
-                                    </a>
-                                </strong>
-                                    <small>{{ contact.email|default:"-" }}</small>
-                            </div>
-
-                            <span>
-                                {{ contact.job_title|default:"-" }}
-                            </span>
+                    <div class="company-contact-row">
+                        <div>
+                            <strong>
+                                <a href="{% url 'contact_detail' contact.id %}" class="contact-name-link">
+                                    {{ contact.name|default:"-" }}
+                                </a>
+                            </strong>
+                            <small>{{ contact.email|default:"-" }}</small>
                         </div>
+
+                        <span>
+                            {{ contact.job_title|default:"-" }}
+                        </span>
+                    </div>
                     {% empty %}
-                        <p class="company-empty-state">
-                            No contacts associated with this company yet.
-                        </p>
+                    <p class="company-empty-state">
+                        No contacts associated with this company yet.
+                    </p>
                     {% endfor %}
                 </section>
 
                 <section class="company-detail-panel">
-                    <h2>Deals <span>0</span></h2>
+                    <h2>Deals <span>{{ deals|length }}</span></h2>
 
-                    <div class="company-placeholder-row">
+                    {% for deal in deals %}
+                    <div class="company-contact-row">
                         <div>
-                            <strong>Deals will appear here</strong>
-                            <span>Deal management is coming later</span>
+                            <a href="{% url 'deal_detail' deal.id %}" class="contact-name-link">
+                                {{ deal.title }}
+                            </a>
+                            <small>Value: ${{ deal.value|floatformat:2 }}</small>
                         </div>
-                        <span>—</span>
+
+                        <span>{{ deal.get_stage_display }}</span>
                     </div>
+                    {% empty %}
+                    <p class="company-empty-state">
+                        No deals associated with this company yet.
+                    </p>
+                    {% endfor %}
                 </section>
 
             </main>
@@ -150,31 +157,29 @@
                     <div class="company-info-row">
                         <span>Email</span>
                         <strong>
-                           
-                                <a href="mailto:{{ contact.email }}">
-                                    {{ company.email|default:"-" }}
-                                </a>
-                            
+
+                            <a href="mailto:{{ contact.email }}">
+                                {{ company.email|default:"-" }}
+                            </a>
+
                         </strong>
                     </div>
 
                     <div class="company-info-row">
                         <span>Website</span>
                         <strong>
-                           
-                                <a href="{{ company.website }}"
-                                   target="_blank"
-                                   rel="noopener noreferrer">
-                                    {{ company.website|default:"-" }}
-                               </a>
-                            
+
+                            <a href="{{ company.website }}" target="_blank" rel="noopener noreferrer">
+                                {{ company.website|default:"-" }}
+                            </a>
+
                         </strong>
                     </div>
 
                 </section>
-                
             </aside>
         </div>
     </div>
 </body>
+
 </html>

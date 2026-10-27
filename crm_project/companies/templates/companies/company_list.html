@@ -49,6 +49,7 @@
                             <th>Phone</th>
                             <th>Email</th>
                             <th>Contacts</th>
+                            <th>Deals</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -66,6 +67,7 @@
                                 <td>{{ company.phone|default:"—" }}</td>
                                 <td>{{ company.email|default:"—" }}</td>
                                 <td>{{ company.contacts.count}} </td>
+                                <td>{{ company.deals_count }}</td>
 
                                 
                                 <td class="actions-cell">

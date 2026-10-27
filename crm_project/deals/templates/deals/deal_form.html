@@ -1,0 +1,148 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    {% if deal %}
+        <title>Edit Deal</title>
+    {% else %}
+        <title>Create Deal</title>
+    {% endif %}
+
+    <link rel="stylesheet" href="{% static 'companies/style.css' %}">
+</head>
+
+<body>
+    <div class="deal-create-page">
+
+        <div class="deal-create-header">
+            <div>
+                {% if deal %}
+                    <h1>Edit Deal</h1>
+                {% else %}
+                    <h1>Create New Deal</h1>
+                {% endif %}
+            </div>
+
+            <a href="{% url 'deal_list' %}" class="company-back-link">
+                ← All Deals
+            </a>
+        </div>
+
+        <div class="deal-create-form-card">
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="deal-create-fields">
+                    {% for field in form %}
+                        <div class="deal-create-field">
+
+                            <label for="{{ field.id_for_label }}">
+                                {{ field.label }}
+                            </label>
+
+                            {% if field.name == 'contact' %}
+
+                                <select
+                                    name="{{ field.html_name }}"
+                                    id="{{ field.id_for_label }}"
+                                    class="form-control">
+
+                                    <option value="">Select Contact Person</option>
+
+                                    {% for contact in contacts %}
+                                        <option
+                                            value="{{ contact.id }}"
+                                            data-company="{{ contact.company_id }}"
+                                            {% if form.contact.value|stringformat:"s" == contact.id|stringformat:"s" %}
+                                                selected
+                                            {% endif %}>
+                                            {{ contact }}
+                                        </option>
+                                    {% empty %}
+                                        <option value="" disabled>
+                                            No contacts available
+                                        </option>
+                                    {% endfor %}
+
+                                </select>
+
+                            {% else %}
+                                {{ field }}
+                            {% endif %}
+
+                            {% for error in field.errors %}
+                                <p class="deal-create-error">
+                                    {{ error }}
+                                </p>
+                            {% endfor %}
+
+                        </div>
+                    {% endfor %}
+                </div>
+
+                {% if form.non_field_errors %}
+                    <div class="deal-create-error">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <div class="deal-create-actions">
+
+                    <a href="{% url 'deal_list' %}"
+                       class="deal-create-cancel-btn">
+                        Cancel
+                    </a>
+
+                    <button type="submit" class="deal-create-save-btn">
+                        {% if deal %}
+                            Save Changes
+                        {% else %}
+                            Save Deal
+                        {% endif %}
+                    </button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const companySelect = document.getElementById('id_company');
+        const contactSelect = document.getElementById('id_contact');
+
+        function filterContacts() {
+            if (!companySelect || !contactSelect) {
+                return;
+            }
+
+            const companyId = companySelect.value;
+
+            for (const option of contactSelect.options) {
+                if (option.value === '') {
+                    continue;
+                }
+
+                const matches = option.dataset.company === companyId;
+
+                option.hidden = !matches;
+                option.disabled = !matches;
+
+                if (!matches && option.selected) {
+                    contactSelect.value = '';
+                }
+            }
+        }
+
+        if (companySelect && contactSelect) {
+            companySelect.addEventListener('change', filterContacts);
+            filterContacts();
+        }
+    </script>
+</body>
+
+</html>

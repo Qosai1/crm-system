@@ -1,0 +1,99 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ deal.title }} | Deal Details</title>
+    <link rel="stylesheet" href="{% static 'companies/style.css' %}">
+</head>
+<body>
+    <div class="container company-detail-page">
+
+        <a href="{% url 'deal_list' %}" class="company-back-link">
+            ← Back to Deals
+        </a>
+
+        <div class="company-profile-header">
+            <div class="company-profile-identity">
+                <div class="company-avatar">
+                    {{ deal.title|slice:":2"|upper }}
+                </div>
+
+                <div>
+                    <h1>{{ deal.title }}</h1>
+                    <p>{{ deal.company.name }}</p>
+                </div>
+            </div>
+
+            
+        </div>
+
+        <div class="company-detail-layout">
+            <main class="company-detail-main">
+
+                <section class="company-stats-grid">
+                    <div class="company-stat-card">
+                        <span>Deal Value</span>
+                        <strong>${{ deal.value }}</strong>
+                    </div>
+
+                    <div class="company-stat-card">
+                        <span>Stage</span>
+                        <strong>{{ deal.get_stage_display }}</strong>
+                    </div>
+
+                    <div class="company-stat-card">
+                        <span>Expected Close</span>
+                        <strong>
+                            {{ deal.expected_close_date|date:"M d, Y"|default:"—" }}
+                        </strong>
+                    </div>
+                </section>
+
+                <section class="company-detail-panel">
+                    <h2>Deal Information</h2>
+
+                    <div class="company-info-row">
+                        <span>Deal Name</span>
+                        <strong>{{ deal.title }}</strong>
+                    </div>
+
+                    <div class="company-info-row">
+                        <span>Company</span>
+                        <strong>{{ deal.company.name }}</strong>
+                    </div>
+
+                    <div class="company-info-row">
+                        <span>Contact</span>
+                        <strong>
+                            {% if deal.contact %}
+                                {{ deal.contact.name }}
+                            {% else %}
+                                —
+                            {% endif %}
+                        </strong>
+                    </div>
+
+                    <div class="company-info-row">
+                        <span>Assigned To</span>
+                        <strong>{{ deal.assigned_to|default:"—" }}</strong>
+                    </div>
+
+                    <div class="company-info-row">
+                        <span>Created</span>
+                        <strong>{{ deal.created_at|date:"M d, Y" }}</strong>
+                    </div>
+
+                    <div class="company-info-row">
+                        <span>Last Updated</span>
+                        <strong>{{ deal.updated_at|date:"M d, Y" }}</strong>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+</body>
+</html>
