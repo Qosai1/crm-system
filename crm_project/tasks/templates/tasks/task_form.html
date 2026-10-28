@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Task | CRM</title>
+
+    <link rel="stylesheet" href="{% static 'tasks/task_form.css' %}">
+</head>
+
+<body>
+
+    <div class="task-form-container">
+        <h1>{% if task %}Edit Task{% else %}Add New Task{% endif %}</h1>
+        <p class="task-form-subtitle">
+            {% if task %}
+            Update the task details below.
+            {% else %}
+            Create a task, set its priority, and track its due date.
+            {% endif %}
+        </p>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <div class="task-form-actions">
+                <button type="submit" class="task-save-btn">
+                    {% if task %}Update Task{% else %}Save Task{% endif %}
+                </button>
+
+                <a href="{% url 'task_list' %}" class="task-cancel-btn">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+
+</body>
+
+</html>

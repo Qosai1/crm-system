@@ -1,0 +1,250 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasks</title>
+    <link rel="stylesheet" href="{% static 'tasks/style.css' %}">
+</head>
+
+<body>
+
+    <header class="tasks-header">
+        <h1>Tasks</h1>
+
+        <div class="header-actions">
+            <form method="GET" action="{% url 'task_list' %}" class="search-form" id="task-search-form">
+                <input type="text" name="q" id="task-search-input" placeholder="Search tasks by name"
+                    value="{{ search_query }}">
+            </form>
+
+            <a href="{% url 'task_create' %}" class="new-task-button">
+                <span>+</span> New task
+            </a>
+        </div>
+    </header>
+
+    <!-- Overdue Tasks -->
+    <section class="task-section">
+        <h2>
+            Overdue
+            <span class="task-count">{{ overdue_tasks.count }}</span>
+        </h2>
+
+        {% for task in overdue_tasks %}
+        <article class="task-item">
+            <div class="task-main">
+                <div class="task-title-row">
+                    <form method="POST" action="{% url 'task_complete' task.id %}" class="complete-form">
+                        {% csrf_token %}
+                        <button type="submit" class="complete-checkbox" title="Mark as complete"
+                            aria-label="Complete {{ task.title }}">
+                        </button>
+                    </form>
+
+                    <a href="{% url 'task_detail' task.id %}" class="task-title">
+                        {{ task.title }}
+                    </a>
+
+                    <span class="task-date overdue-date">
+                        {{ task.due_date|date:"M d" }}
+                    </span>
+                    <span class="task-priority priority-{{ task.priority }}">
+                        {{ task.get_priority_display }}
+                    </span>
+
+                    <details class="task-menu">
+                        <summary title="Task actions">⚙</summary>
+                        <div class="task-menu-content">
+                            <a href="{% url 'task_edit' task.id %}">Edit</a>
+
+                            <form method="POST" action="{% url 'task_delete' task.id %}"
+                                onsubmit="return confirm('Are you sure you want to delete this task?');">
+                                {% csrf_token %}
+                                <button type="submit">Delete</button>
+                            </form>
+                        </div>
+                    </details>
+                </div>
+
+                {% if task.description %}
+                <p class="task-description">
+                    {{ task.description }}
+                </p>
+                {% endif %}
+            </div>
+        </article>
+        {% empty %}
+        <p class="empty-message">No overdue tasks.</p>
+        {% endfor %}
+    </section>
+
+    <!-- Today's Tasks -->
+    <section class="task-section">
+        <h2>
+            Today
+            <span class="task-count">{{ today_tasks.count }}</span>
+        </h2>
+
+        {% for task in today_tasks %}
+        <article class="task-item">
+            <div class="task-main">
+                <div class="task-title-row">
+                    <form method="POST" action="{% url 'task_complete' task.id %}" class="complete-form">
+                        {% csrf_token %}
+                        <button type="submit" class="complete-checkbox" title="Mark as complete"
+                            aria-label="Complete {{ task.title }}">
+                        </button>
+                    </form>
+
+                    <a href="{% url 'task_detail' task.id %}" class="task-title">
+                        {{ task.title }}
+                    </a>
+                    <span class="task-date today-date">
+                        Today
+                    </span>
+                    <span class="task-priority priority-{{ task.priority }}">
+                        {{ task.get_priority_display }}
+                    </span>
+
+                    <details class="task-menu">
+                        <summary title="Task actions">⚙</summary>
+                        <div class="task-menu-content">
+                            <a href="{% url 'task_edit' task.id %}">Edit</a>
+                            <form method="POST" action="{% url 'task_delete' task.id %}"
+                                onsubmit="return confirm('Are you sure you want to delete this task?');">
+                                {% csrf_token %}
+                                <button type="submit">Delete</button>
+                            </form>
+                        </div>
+                    </details>
+                </div>
+
+                {% if task.description %}
+                <p class="task-description">
+                    {{ task.description }}
+                </p>
+                {% endif %}
+            </div>
+        </article>
+        {% empty %}
+        <p class="empty-message">No tasks due today.</p>
+        {% endfor %}
+    </section>
+
+    <!-- Upcoming Tasks -->
+    <section class="task-section">
+        <h2>
+            Upcoming
+            <span class="task-count">{{ upcoming_tasks.count }}</span>
+        </h2>
+
+        {% for task in upcoming_tasks %}
+        <article class="task-item">
+            <div class="task-main">
+                <div class="task-title-row">
+                    <form method="POST" action="{% url 'task_complete' task.id %}" class="complete-form">
+                        {% csrf_token %}
+                        <button type="submit" class="complete-checkbox" title="Mark as complete"
+                            aria-label="Complete {{ task.title }}">
+                        </button>
+                    </form>
+
+                    <a href="{% url 'task_detail' task.id %}" class="task-title">
+                        {{ task.title }}
+                    </a>
+
+                    <span class="task-date upcoming-date">
+                        {{ task.due_date|date:"M d" }}
+                    </span>
+                    <span class="task-priority priority-{{ task.priority }}">
+                        {{ task.get_priority_display }}
+                    </span>
+
+                    <details class="task-menu">
+                        <summary title="Task actions">⚙</summary>
+                        <div class="task-menu-content">
+                            <a href="{% url 'task_edit' task.id %}">Edit</a>
+                            <form method="POST" action="{% url 'task_delete' task.id %}"
+                                onsubmit="return confirm('Are you sure you want to delete this task?');">
+                                {% csrf_token %}
+                                <button type="submit">Delete</button>
+                            </form>
+                        </div>
+                    </details>
+                </div>
+
+                {% if task.description %}
+                <p class="task-description">
+                    {{ task.description }}
+                </p>
+                {% endif %}
+            </div>
+        </article>
+        {% empty %}
+        <p class="empty-message">No upcoming tasks.</p>
+        {% endfor %}
+    </section>
+
+    <!-- Completed Tasks -->
+    <section class="task-section">
+        <h2>
+            Completed
+            <span class="task-count">{{ completed_tasks.count }}</span>
+        </h2>
+
+        {% for task in completed_tasks %}
+        <article class="task-item completed-task">
+            <div class="task-main">
+                <div class="task-title-row">
+                    <span class="completed-checkmark">✓</span>
+
+                    <a href="{% url 'task_edit' task.id %}" class="task-title">
+                        {{ task.title }}
+                    </a>
+
+                    <details class="task-menu">
+                        <summary title="Task actions">⚙</summary>
+                        <div class="task-menu-content">
+                            <a href="{% url 'task_edit' task.id %}">Edit</a>
+                            <form method="POST" action="{% url 'task_delete' task.id %}"
+                                onsubmit="return confirm('Are you sure you want to delete this task?');">
+                                {% csrf_token %}
+                                <button type="submit">Delete</button>
+                            </form>
+                        </div>
+                    </details>
+                </div>
+
+                {% if task.description %}
+                <p class="task-description">
+                    {{ task.description }}
+                </p>
+                {% endif %}
+            </div>
+        </article>
+        {% empty %}
+        <p class="empty-message">No completed tasks.</p>
+        {% endfor %}
+    </section>
+
+    <script>
+        const searchInput = document.getElementById('task-search-input');
+        const searchForm = document.getElementById('task-search-form');
+
+        let searchTimeout;
+
+        searchInput.addEventListener('input', function () {
+            clearTimeout(searchTimeout);
+
+            searchTimeout = setTimeout(function () {
+                searchForm.submit();
+            }, 500);
+        });
+    </script>
+
+</body>
+
+</html>

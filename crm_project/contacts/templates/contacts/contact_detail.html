@@ -14,7 +14,7 @@
     <div class="container company-detail-page">
 
         <a href="{% url 'contact_list' %}" class="company-back-link">
-            ← All contacts
+            ← All Contacts
         </a>
 
         <div class="company-profile-header">
@@ -41,6 +41,12 @@
             </div>
 
             <div class="company-profile-actions">
+                <a href="{% url 'task_create' %}" class="detail-action-btn">
+               + New Task
+            </a>
+            <a href="{% url 'deal_create' %}?company={{ company.id }}" class="detail-action-btn"">
+                    ＋ New Deal
+                </a>
                 <a href="{% url 'contact_edit' contact.id %}" class="detail-action-btn">
                     Edit
                 </a>
@@ -75,7 +81,7 @@
 
                     <div class="company-stat-card">
                         <span>Open tasks</span>
-                        <strong>0</strong>
+                        <strong>{{ open_tasks_count }}</strong>
                     </div>
 
                 </section>
@@ -106,18 +112,54 @@
                 </section>
 
 
-                <section class="company-detail-panel">
-                    <h2>Tasks <span>0</span></h2>
 
-                    <div class="company-placeholder-row">
+
+                <section class="company-detail-panel">
+                    <h2>Tasks <span>{{ open_tasks_count }}</span></h2>
+
+                    {% for task in tasks %}
+                    <div class="company-contact-row">
                         <div>
-                            <strong>Tasks will appear here</strong>
-                            <span>Task management will be added later.</span>
+                            <strong>
+                                <a href="{% url 'task_detail' task.id %}" class="contact-name-link">
+                                    {{ task.title }}
+                                </a>
+                            </strong>
+
+                            <small>Priority: {{ task.get_priority_display }}</small>
+
+                            <small>
+                                Due:
+                                {% if task.due_date %}
+                                {{ task.due_date|date:"M d, Y H:i" }}
+                                {% else %}
+                                No due date
+                                {% endif %}
+                            </small>
                         </div>
 
-                        <span>—</span>
+                        <form method="post" action="{% url 'task_complete' task.id %}">
+                            {% csrf_token %}
+
+                            <label>
+                                <input type="checkbox" {% if task.is_completed %}checked{% endif %}
+                                    onchange="this.form.submit()">
+                                {% if task.is_completed %}
+                                Completed
+                                {% else %}
+                                Open
+                                {% endif %}
+                            </label>
+                        </form>
                     </div>
+                    {% empty %}
+                    <p class="company-empty-state">
+                        No tasks associated with this contact yet.
+                    </p>
+                    {% endfor %}
                 </section>
+
+
 
             </main>
 

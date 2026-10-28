@@ -1,99 +1,181 @@
-
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ deal.title }} | Deal Details</title>
     <link rel="stylesheet" href="{% static 'companies/style.css' %}">
 </head>
+
 <body>
-    <div class="container company-detail-page">
+    <div class="container deal-details-page">
 
-        <a href="{% url 'deal_list' %}" class="company-back-link">
-            ← Back to Deals
-        </a>
+        <div class="deal-page-heading">
+            <h1>Deals</h1>
+            <a href="{% url 'deal_create' %}?company={{ company.id }}" class="deal-new-button"">
+                    ＋ New deal
+                </a>
+    </div>
 
-        <div class="company-profile-header">
-            <div class="company-profile-identity">
-                <div class="company-avatar">
-                    {{ deal.title|slice:":2"|upper }}
+    <a href=" {% url 'deal_list' %}" class="deal-back-link">
+                ← All deals
+            </a>
+
+            <div class="deal-details-header">
+                <div class="deal-heading-identity">
+                    <div class="deal-large-avatar">
+                        {{ deal.title|slice:":2"|upper }}
+                    </div>
+
+                    <div>
+                        <h2>{{ deal.title }}</h2>
+                        <p>
+                            {{ deal.get_stage_display }}
+                            · ${{ deal.value|floatformat:2 }}
+                        </p>
+                    </div>
                 </div>
 
-                <div>
-                    <h1>{{ deal.title }}</h1>
-                    <p>{{ deal.company.name }}</p>
+                <div class="deal-header-actions">
+                    <button type="button" class="deal-action-button">
+                        ＋ New task
+                    </button>
+
+                    <a href="{% url 'deal_edit' deal.pk %}" class="deal-action-button">
+                        Edit
+                    </a>
+
                 </div>
             </div>
 
-            
-        </div>
+            <div class="deal-details-grid">
 
-        <div class="company-detail-layout">
-            <main class="company-detail-main">
+                <main class="deal-details-main">
 
-                <section class="company-stats-grid">
-                    <div class="company-stat-card">
-                        <span>Deal Value</span>
-                        <strong>${{ deal.value }}</strong>
-                    </div>
+                    <section class="deal-metrics-grid">
+                        <div class="deal-metric-card">
+                            <span>Stage</span>
+                            <strong>{{ deal.get_stage_display }}</strong>
+                        </div>
 
-                    <div class="company-stat-card">
-                        <span>Stage</span>
-                        <strong>{{ deal.get_stage_display }}</strong>
-                    </div>
+                        <div class="deal-metric-card">
+                            <span>Value</span>
+                            <strong>${{ deal.value|floatformat:2 }}</strong>
+                        </div>
 
-                    <div class="company-stat-card">
-                        <span>Expected Close</span>
-                        <strong>
-                            {{ deal.expected_close_date|date:"M d, Y"|default:"—" }}
-                        </strong>
-                    </div>
-                </section>
+                        <div class="deal-metric-card">
+                            <span>Expected close</span>
+                            <strong>
+                                {{ deal.expected_close_date|date:"M d"|default:"—" }}
+                            </strong>
+                        </div>
 
-                <section class="company-detail-panel">
-                    <h2>Deal Information</h2>
+                        <div class="deal-metric-card">
+                            <span>Open tasks</span>
+                            <strong>0</strong>
+                        </div>
+                    </section>
 
-                    <div class="company-info-row">
-                        <span>Deal Name</span>
-                        <strong>{{ deal.title }}</strong>
-                    </div>
+                    <section class="deal-detail-panel">
+                        <h3>Tasks <span>0</span></h3>
 
-                    <div class="company-info-row">
-                        <span>Company</span>
-                        <strong>{{ deal.company.name }}</strong>
-                    </div>
+                        <div class="deal-empty-task">
+                            <p>No tasks associated with this deal yet.</p>
+                        </div>
+                    </section>
 
-                    <div class="company-info-row">
-                        <span>Contact</span>
-                        <strong>
-                            {% if deal.contact %}
-                                {{ deal.contact.name }}
-                            {% else %}
+                    <section class="deal-detail-panel">
+                        <h3>People and company</h3>
+
+                        {% if deal.company %}
+                        <a href="{% url 'company_detail' deal.company.id %}" class="deal-related-row">
+                            <strong>{{ deal.company.name }}</strong>
+                            <span>{{ deal.company.industry|default:"Company" }}</span>
+                        </a>
+                        {% endif %}
+
+                        {% if deal.contact %}
+                        <a href="{% url 'contact_detail' deal.contact.id %}" class="deal-related-row">
+                            <strong>{{ deal.contact.name }}</strong>
+                            <span>{{ deal.contact.job_title|default:"Contact" }}</span>
+                        </a>
+                        {% else %}
+                        <p class="deal-muted-text">No contact associated with this deal.</p>
+                        {% endif %}
+                    </section>
+
+                </main>
+
+                <aside class="deal-details-sidebar">
+
+                    <section class="deal-detail-panel deal-information-panel">
+                        <h3>Details</h3>
+
+                        <div class="deal-information-row">
+                            <span>Stage</span>
+                            <strong>{{ deal.get_stage_display }}</strong>
+                        </div>
+
+                        <div class="deal-information-row">
+                            <span>Value</span>
+                            <strong>${{ deal.value|floatformat:2 }}</strong>
+                        </div>
+
+                        <div class="deal-information-row">
+                            <span>Expected close</span>
+                            <strong>
+                                {{ deal.expected_close_date|date:"M d, Y"|default:"—" }}
+                            </strong>
+                        </div>
+
+                        <div class="deal-information-row">
+                            <span>Company</span>
+                            <strong>
+                                {% if deal.company %}
+                                <a href="{% url 'company_detail' deal.company.id %}">
+                                    {{ deal.company.name }}
+                                </a>
+                                {% else %}
                                 —
-                            {% endif %}
-                        </strong>
-                    </div>
+                                {% endif %}
+                            </strong>
+                        </div>
 
-                    <div class="company-info-row">
-                        <span>Assigned To</span>
-                        <strong>{{ deal.assigned_to|default:"—" }}</strong>
-                    </div>
+                        <div class="deal-information-row">
+                            <span>Contact</span>
+                            <strong>
+                                {% if deal.contact %}
+                                <a href="{% url 'contact_detail' deal.contact.id %}">
+                                    {{ deal.contact.name }}
+                                </a>
+                                {% else %}
+                                —
+                                {% endif %}
+                            </strong>
+                        </div>
 
-                    <div class="company-info-row">
-                        <span>Created</span>
-                        <strong>{{ deal.created_at|date:"M d, Y" }}</strong>
-                    </div>
+                        <div class="deal-information-row">
+                            <span>Assigned to</span>
+                            <strong>{{ deal.assigned_to|default:"—" }}</strong>
+                        </div>
 
-                    <div class="company-info-row">
-                        <span>Last Updated</span>
-                        <strong>{{ deal.updated_at|date:"M d, Y" }}</strong>
-                    </div>
-                </section>
+                        <div class="deal-information-row">
+                            <span>Created</span>
+                            <strong>{{ deal.created_at|date:"M d, Y" }}</strong>
+                        </div>
 
-            </main>
+                        <div class="deal-information-row">
+                            <span>Last updated</span>
+                            <strong>{{ deal.updated_at|date:"M d, Y" }}</strong>
+                        </div>
+                    </section>
+
+                </aside>
+
+            </div>
         </div>
-    </div>
 </body>
+
 </html>

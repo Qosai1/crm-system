@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.db.models import Sum
 from deals.models import Deal
-
+from tasks.models import Task
 
 
 def contact_list(request):
@@ -75,16 +75,18 @@ def contact_delete(request, contact_id):
     return redirect('contact_list')
 
 
-def contact_detail(request, contact_id):
-    from django.db.models import Sum
-    from deals.models import Deal
 
+def contact_detail(request, contact_id):
     contact = get_object_or_404(Contact, id=contact_id)
 
     deals = Deal.objects.filter(contact=contact)
 
     open_deals = deals.exclude(stage__in=['won', 'lost'])
     won_deals = deals.filter(stage='won')
+
+    tasks = Task.objects.filter(contact=contact)
+    open_tasks = tasks.filter(is_completed=False)
+    completed_tasks = tasks.filter(is_completed=True)
 
     context = {
         'contact': contact,
@@ -96,6 +98,9 @@ def contact_detail(request, contact_id):
         'won_deals_value': (
             won_deals.aggregate(total=Sum('value'))['total'] or 0
         ),
+        'tasks': tasks,
+        'open_tasks_count': open_tasks.count(),
+        'completed_tasks_count': completed_tasks.count(),
     }
 
     return render(

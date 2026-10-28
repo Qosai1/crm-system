@@ -1,0 +1,84 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ task.title }} | Task Details</title>
+<link rel="stylesheet" href="{% static 'tasks/task_detail.css' %}"></head>
+<body>
+
+    <header class="tasks-header">
+        <h1>Task Details</h1>
+        <a href="{% url 'task_list' %}" class="new-task-button">
+            ← All Tasks
+        </a>
+    </header>
+
+    <section class="task-section">
+        <h2>{{ task.title }}</h2>
+
+        <p><strong>Description:</strong></p>
+        <p>{{ task.description|default:"No description provided." }}</p>
+
+        <hr>
+
+        <p>
+            <strong>Due Date:</strong>
+            {% if task.due_date %}
+                {{ task.due_date|date:"M d, Y - H:i" }}
+            {% else %}
+                Not set
+            {% endif %}
+        </p>
+
+        <p>
+            <strong>Priority:</strong>
+            {{ task.get_priority_display }}
+        </p>
+
+        <p>
+            <strong>Status:</strong>
+            {% if task.is_completed %}
+                Completed
+            {% else %}
+                Incomplete
+            {% endif %}
+        </p>
+
+        <p>
+            <strong>Contact:</strong>
+            {% if task.contact %}
+                {{ task.contact }}
+            {% else %}
+                Not assigned
+            {% endif %}
+        </p>
+
+        <p>
+            <strong>Deal:</strong>
+            {% if task.deal %}
+                {{ task.deal }}
+            {% else %}
+                Not assigned
+            {% endif %}
+        </p>
+
+        <p>
+            <strong>Created:</strong>
+            {{ task.created_at|date:"M d, Y - H:i" }}
+        </p>
+
+        <p>
+            <strong>Last Updated:</strong>
+            {{ task.updated_at|date:"M d, Y - H:i" }}
+        </p>
+
+        <hr>
+
+        <a href="{% url 'task_edit' task.id %}">Edit Task</a>
+    </section>
+
+</body>
+</html>
