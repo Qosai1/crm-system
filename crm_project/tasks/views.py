@@ -5,6 +5,7 @@ from .forms import TaskForm
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
 from django.utils import timezone
+from deals.models import Deal
 
 
 def task_list(request):
@@ -54,21 +55,37 @@ def task_list(request):
 
 
 
+
 def task_create(request):
+    deal_id = request.GET.get('deal') or request.POST.get('deal')
+    deal = None
+
+    if deal_id:
+        deal = get_object_or_404(Deal, id=deal_id)
+
     if request.method == 'POST':
         form = TaskForm(request.POST)
 
         if form.is_valid():
-            form.save()
-            return redirect('task_list')
+            task = form.save(commit=False)
+
+            if deal:
+                task.deal = deal
+
+            task.save()
+            return redirect('deal_detail', deal_id=deal.id) if deal else redirect('task_list')
     else:
-        form = TaskForm()
+        form = TaskForm(initial={'deal': deal} if deal else None)
 
     return render(
         request,
         'tasks/task_form.html',
-        {'form': form}
+        {
+            'form': form,
+            'deal': deal,
+        }
     )
+
 
 
 @require_POST

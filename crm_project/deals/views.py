@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_protect
-
+from tasks.models import Task
 from .models import Deal
 from .forms import DealForm
 from contacts.models import Contact
@@ -17,12 +17,10 @@ def deal_list(request):
     ).all().order_by('-created_at')
 
     stages = Deal.STAGE_CHOICES
-
     columns = []
 
     for stage_code, stage_label in stages:
         stage_deals = deals.filter(stage=stage_code)
-
         columns.append({
             'code': stage_code,
             'label': stage_label,
@@ -33,23 +31,16 @@ def deal_list(request):
     context = {
         'deals': deals,
         'columns': columns,
-         'stages': stages,
+        'stages': stages,
         'open_deals_count': deals.exclude(
             stage__in=['won', 'lost']
         ).count(),
-        'won_deals_count': deals.filter(
-            stage='won'
-        ).count(),
-        'lost_deals_count': deals.filter(
-            stage='lost'
-        ).count(),
+        'won_deals_count': deals.filter(stage='won').count(),
+        'lost_deals_count': deals.filter(stage='lost').count(),
     }
 
-    return render(
-        request,
-        'deals/deal_list.html',
-        context
-    )
+    return render(request, 'deals/deal_list.html', context)
+
 
 @require_POST
 @csrf_protect
@@ -82,6 +73,7 @@ def update_deal_stage(request, pk):
         'message': 'Deal stage updated successfully'
     })
 
+
 def deal_create(request):
     if request.method == 'POST':
         form = DealForm(request.POST)
@@ -93,13 +85,13 @@ def deal_create(request):
         form = DealForm()
 
     return render(request, 'deals/deal_form.html', {
-    'form': form,
-    'contacts': Contact.objects.all(),
-})
+        'form': form,
+        'contacts': Contact.objects.all(),
+    })
 
 
 def deal_edit(request, pk):
-    deal = Deal.objects.get(pk=pk)
+    deal = get_object_or_404(Deal, pk=pk)
 
     if request.method == 'POST':
         form = DealForm(request.POST, instance=deal)
@@ -116,8 +108,9 @@ def deal_edit(request, pk):
         'deal': deal,
     })
 
+
 def deal_delete(request, pk):
-    deal = Deal.objects.get(pk=pk)
+    deal = get_object_or_404(Deal, pk=pk)
 
     if request.method == 'POST':
         deal.delete()
@@ -126,8 +119,6 @@ def deal_delete(request, pk):
     return render(request, 'deals/deal_confirm_delete.html', {
         'deal': deal,
     })
-from django.shortcuts import get_object_or_404, render
-from .models import Deal
 
 
 def deal_detail(request, deal_id):
@@ -140,6 +131,11 @@ def deal_detail(request, deal_id):
         pk=deal_id
     )
 
+    tasks = deal.tasks.all()
+
     return render(request, 'deals/deal_detail.html', {
         'deal': deal,
+        'tasks': tasks,
+        'open_tasks_count': tasks.filter(is_completed=False).count(),
+        'completed_tasks_count': tasks.filter(is_completed=True).count(),
     })

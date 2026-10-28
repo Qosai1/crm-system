@@ -42,12 +42,12 @@
 
             <div class="company-profile-actions">
                 <a href="{% url 'task_create' %}" class="detail-action-btn">
-               + New Task
-            </a>
-            <a href="{% url 'deal_create' %}?company={{ company.id }}" class="detail-action-btn"">
+                    + New Task
+                </a>
+                <a href="{% url 'deal_create' %}?company={{ company.id }}" class="detail-action-btn"">
                     ＋ New Deal
                 </a>
-                <a href="{% url 'contact_edit' contact.id %}" class="detail-action-btn">
+                <a href=" {% url 'contact_edit' contact.id %}" class="detail-action-btn">
                     Edit
                 </a>
 
@@ -71,12 +71,12 @@
 
                     <div class="company-stat-card">
                         <span>Open value</span>
-                        <strong>${{ open_deals_value|floatformat:2 }}</strong>
+                        <strong>${{ open_deals_value }}</strong>
                     </div>
 
                     <div class="company-stat-card">
                         <span>Won value</span>
-                        <strong>${{ won_deals_value|floatformat:2 }}</strong>
+                        <strong>${{ won_deals_value }}</strong>
                     </div>
 
                     <div class="company-stat-card">
@@ -114,50 +114,67 @@
 
 
 
-                <section class="company-detail-panel">
-                    <h2>Tasks <span>{{ open_tasks_count }}</span></h2>
 
-                    {% for task in tasks %}
-                    <div class="company-contact-row">
-                        <div>
-                            <strong>
-                                <a href="{% url 'task_detail' task.id %}" class="contact-name-link">
-                                    {{ task.title }}
-                                </a>
-                            </strong>
 
-                            <small>Priority: {{ task.get_priority_display }}</small>
 
-                            <small>
-                                Due:
-                                {% if task.due_date %}
-                                {{ task.due_date|date:"M d, Y H:i" }}
-                                {% else %}
-                                No due date
-                                {% endif %}
-                            </small>
-                        </div>
+                <section class="deal-detail-panel">
+                    <h3>
+                        Tasks
+                        <span>{{ tasks|length }}</span>
+                    </h3>
 
-                        <form method="post" action="{% url 'task_complete' task.id %}">
-                            {% csrf_token %}
+                    {% if tasks %}
+                    <div class="deal-tasks-list">
+                        {% for task in tasks %}
+                        <div class="deal-task-row">
+                            <div class="deal-task-info">
+                                <strong>
+                                    <a href="{% url 'task_detail' task.id %}" class="deal-related-row">
+                                        {{ task.title }}
+                                    </a>
+                                </strong>
 
-                            <label>
-                                <input type="checkbox" {% if task.is_completed %}checked{% endif %}
-                                    onchange="this.form.submit()">
+                                <p>
+                                    Priority: {{ task.get_priority_display }}
+                                    ·
+                                    {% if task.due_date %}
+                                    Due: {{ task.due_date|date:"M d, Y" }}
+                                    {% else %}
+                                    No due date
+                                    {% endif %}
+                                </p>
+                            </div>
+
+                            <div class="deal-task-status">
                                 {% if task.is_completed %}
-                                Completed
+                                <span>Completed</span>
                                 {% else %}
-                                Open
+                                <span>Open</span>
                                 {% endif %}
-                            </label>
-                        </form>
+                            </div>
+
+                            <form method="POST" action="{% url 'task_complete' task.id %}">
+                                {% csrf_token %}
+
+                                <button type="submit">
+                                    {% if task.is_completed %}
+                                    Reopen
+                                    {% else %}
+                                    Complete
+                                    {% endif %}
+                                </button>
+                            </form>
+                        </div>
+                        {% endfor %}
                     </div>
-                    {% empty %}
-                    <p class="company-empty-state">
-                        No tasks associated with this contact yet.
-                    </p>
-                    {% endfor %}
+                    {% else %}
+                    <div class="deal-empty-task">
+                        <p>No tasks associated with this contact yet.</p>
+                    </div>
+                    {% endif %}
                 </section>
+
+
 
 
 
