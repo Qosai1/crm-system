@@ -1,102 +1,97 @@
 
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Companies</title>
 
-    <link rel="stylesheet" href="{% static 'companies/style.css' %}">
-</head>
-<body>
+{% block title %}Companies | CRM System{% endblock %}
 
-    <div class="container">
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'companies/style.css' %}">
+{% endblock %}
 
-        <div class="page-header">
-            <div>
-                <h1>Companies</h1>
-            </div > 
+{% block content %}
 
-            
-<div class="header-actions">
-    <form method="GET" action="{% url 'company_list' %}" class="search-form">
-        <input
-            type="search"
-            name="q"
-            placeholder="Search companies..."
-            value="{{ request.GET.q }}"
-            
-        >
-    </form>
+<div class="container">
 
-    <a href="{% url 'addcompany' %}" class="btn-primary">
-        + Add Company
-    </a>
+    <div class="page-header">
+        <div>
+            <h1>Companies</h1>
+        </div>
+
+        <div class="header-actions">
+            <form method="GET" action="{% url 'company_list' %}" class="search-form">
+                <input
+                    type="search"
+                    name="q"
+                    placeholder="Search companies..."
+                    value="{{ request.GET.q|default:'' }}"
+                >
+            </form>
+
+            <a href="{% url 'addcompany' %}" class="btn-primary">
+                + Add Company
+            </a>
+        </div>
+    </div>
+
+    <div class="table-card">
+        {% if companies %}
+            <table class="companies-table">
+                <thead>
+                    <tr>
+                        <th>Company Name</th>
+                        <th>Industry</th>
+                        <th>City</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Contacts</th>
+                        <th>Deals</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for company in companies %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'company_detail' company.id %}" class="company-name-link">
+                                    {{ company.name }}
+                                </a>
+                            </td>
+
+                            <td>{{ company.industry|default:"—" }}</td>
+                            <td>{{ company.city|default:"—" }}</td>
+                            <td>{{ company.phone|default:"—" }}</td>
+                            <td>{{ company.email|default:"—" }}</td>
+                            <td>{{ company.contacts.count }}</td>
+                            <td>{{ company.deals_count|default:0 }}</td>
+
+                            <td class="actions-cell">
+                                <a href="{% url 'company_edit' company.id %}" class="btn-edit">
+                                    Edit
+                                </a>
+
+                                <button
+                                    type="button"
+                                    class="btn-delete"
+                                    onclick="openDeleteModal('{{ company.id }}', '{{ company.name|escapejs }}')">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="empty-message">
+                <p>No companies found.</p>
+                <p>Add your first company to get started.</p>
+            </div>
+        {% endif %}
+    </div>
+
 </div>
 
-            
-        </div>
-
-        <div class="table-card">
-            {% if companies %}
-                <table class="companies-table">
-                    <thead>
-                        <tr>
-                            <th>Company Name</th>
-                            <th>Industry</th>
-                            <th>City</th>
-                            <th>Phone</th>
-                            <th>Email</th>
-                            <th>Contacts</th>
-                            <th>Deals</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {% for company in companies %}
-                            <tr>
-                                <td>
-                                  <a href="{% url 'company_detail' company.id %}" class="company-name-link">
-                                                      {{ company.name }}
-                                  </a>
-                                </td>
-                                <td>{{ company.industry|default:"—" }}</td>
-                                <td>{{ company.city }}</td>
-                                <td>{{ company.phone|default:"—" }}</td>
-                                <td>{{ company.email|default:"—" }}</td>
-                                <td>{{ company.contacts.count}} </td>
-                                <td>{{ company.deals_count }}</td>
-
-                                
-                                <td class="actions-cell">
-                                    <a href="{% url 'company_edit' company.id %}" class="btn-edit">
-                                        Edit
-                                    </a>
-                                
-                                    <button
-                                        type="button"
-                                        class="btn-delete"
-                                        onclick="openDeleteModal('{{ company.id }}', '{{ company.name|escapejs }}')">
-                                       Delete
-                                    </button>
-                                </td>
-
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% else %}
-                <div class="empty-message">
-                    <p>No companies found.</p>
-                    <p>Add your first company to get started.</p>
-                </div>
-            {% endif %}
-        </div>
-
-    </div>
-    
+<!-- Delete Confirmation Modal -->
 <div id="deleteModal" class="company-delete-overlay">
     <div class="company-delete-card">
         <div class="company-delete-icon">!</div>
@@ -107,7 +102,10 @@
             Are you sure you want to delete
             <strong id="deleteCompanyName"></strong>?
         </p>
-        <p class="company-delete-warning">This action cannot be undone.</p>
+
+        <p class="company-delete-warning">
+            This action cannot be undone.
+        </p>
 
         <form id="deleteForm" method="POST">
             {% csrf_token %}
@@ -128,26 +126,25 @@
     </div>
 </div>
 
-
-
-    
 <script>
     const searchInput = document.querySelector('.search-form input');
     const searchForm = document.querySelector('.search-form');
     let searchTimer;
 
-    searchInput.addEventListener('input', function () {
-        clearTimeout(searchTimer);
+    if (searchInput && searchForm) {
+        searchInput.addEventListener('input', function () {
+            clearTimeout(searchTimer);
 
-        if (this.value.trim() === '') {
-            searchForm.requestSubmit();
-            return;
-        }
+            if (this.value.trim() === '') {
+                searchForm.requestSubmit();
+                return;
+            }
 
-        searchTimer = setTimeout(function () {
-            searchForm.requestSubmit();
-        }, 500);
-    });
+            searchTimer = setTimeout(function () {
+                searchForm.requestSubmit();
+            }, 500);
+        });
+    }
 </script>
 
 <script>
@@ -162,7 +159,6 @@
         }
 
         companyNameElement.textContent = companyName;
-
         deleteForm.action = `/companies/${companyId}/delete/`;
 
         modal.classList.add('active');
@@ -179,19 +175,18 @@
     const deleteModal = document.getElementById('deleteModal');
 
     if (deleteModal) {
-        deleteModal.addEventListener('click', function(event) {
+        deleteModal.addEventListener('click', function (event) {
             if (event.target === deleteModal) {
                 closeDeleteModal();
             }
         });
     }
 
-    document.addEventListener('keydown', function(event) {
+    document.addEventListener('keydown', function (event) {
         if (event.key === 'Escape') {
             closeDeleteModal();
         }
     });
 </script>
 
-</body>
-</html>
+{% endblock %}

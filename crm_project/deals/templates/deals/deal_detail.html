@@ -1,15 +1,13 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ deal.title }} | Deal Details</title>
-    <link rel="stylesheet" href="{% static 'companies/style.css' %}">
-</head>
+{% block title %}Companies | CRM System{% endblock %}
 
-<body>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'deals/style.css' %}">
+{% endblock %}
+
+{% block content %}
     <div class="container deal-details-page">
 
         <div class="deal-page-heading">
@@ -227,6 +225,4 @@
 
         </div>
     </div>
-</body>
-
-</html>
+{% endblock %}

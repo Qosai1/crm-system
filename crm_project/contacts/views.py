@@ -6,8 +6,9 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Sum
 from deals.models import Deal
 from tasks.models import Task
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def contact_list(request):
 
     query = request.GET.get('q','').strip()
@@ -29,7 +30,7 @@ def contact_list(request):
 
     return render(request,'contacts/contact_list.html',context)
 
-
+@login_required
 def contact_create(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
@@ -44,7 +45,7 @@ def contact_create(request):
         'form': form,
     })
 
-
+@login_required
 def contact_edit(request, contact_id):
     contact = Contact.objects.get(id=contact_id)
 
@@ -64,7 +65,7 @@ def contact_edit(request, contact_id):
 
 
 
-
+@login_required
 def contact_delete(request, contact_id):
     contact = get_object_or_404(Contact, id=contact_id)
 
@@ -75,7 +76,7 @@ def contact_delete(request, contact_id):
     return redirect('contact_list')
 
 
-
+@login_required
 def contact_detail(request, contact_id):
     contact = get_object_or_404(Contact, id=contact_id)
 

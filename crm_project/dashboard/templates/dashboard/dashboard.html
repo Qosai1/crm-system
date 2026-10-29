@@ -1,0 +1,264 @@
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Dashboard | CRM System{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'dashboard/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-page">
+
+    <div class="dashboard-header">
+        <h1>Dashboard</h1>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="dashboard-stats">
+
+        <div class="stat-card">
+            <div class="stat-icon companies-icon">
+                <i data-lucide="building-2"></i>
+            </div>
+            <div class="stat-info">
+                <p>Total Companies</p>
+                <h2>{{ companies_count }}</h2>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon contacts-icon">
+                <i data-lucide="users"></i>
+            </div>
+            <div class="stat-info">
+                <p>Total Contacts</p>
+                <h2>{{ contacts_count }}</h2>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon deals-icon">
+                <i data-lucide="handshake"></i>
+            </div>
+            <div class="stat-info">
+                <p>Total Deals</p>
+                <h2>{{ deals_count }}</h2>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon tasks-icon">
+                <i data-lucide="clipboard-check"></i>
+            </div>
+            <div class="stat-info">
+                <p>Total Tasks</p>
+                <h2>{{ tasks_count }}</h2>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Recent Items -->
+    <div class="dashboard-sections">
+
+        <!-- Recent Companies -->
+        <section class="dashboard-section">
+            <h2>Recent Companies</h2>
+
+            {% for company in recent_companies %}
+            <div class="dashboard-row">
+                <a href="{% url 'company_detail' company.id %}" class="dashboard-name-link">
+                    {{ company.name }}
+                </a>
+
+                <span>{{ company.industry|default:"—" }}</span>
+            </div>
+            {% empty %}
+            <p class="empty-message">No companies yet.</p>
+            {% endfor %}
+        </section>
+
+        <!-- Recent Contacts -->
+        <section class="dashboard-section">
+            <h2>Recent Contacts</h2>
+
+            {% for contact in recent_contacts %}
+            <div class="dashboard-row">
+                <a href="{% url 'contact_detail' contact.id %}" class="dashboard-name-link">
+                    {{ contact.name }}
+                </a>
+
+                <span>{{ contact.email|default:"—" }}</span>
+            </div>
+            {% empty %}
+            <p class="empty-message">No contacts yet.</p>
+            {% endfor %}
+        </section>
+
+        <!-- Recent Deals -->
+        <section class="dashboard-section">
+            <h2>Recent Deals</h2>
+
+            {% for deal in recent_deals %}
+            <div class="dashboard-row">
+                <a href="{% url 'deal_detail' deal.id %}" class="dashboard-name-link">
+                    {{ deal.title }}
+                </a>
+
+                <span>{{ deal.get_stage_display }}</span>
+            </div>
+            {% empty %}
+            <p class="empty-message">No deals yet.</p>
+            {% endfor %}
+        </section>
+
+        <!-- Recent Tasks -->
+        <section class="dashboard-section">
+            <h2>Recent Tasks</h2>
+
+            {% for task in recent_tasks %}
+            <div class="dashboard-row">
+                <a href="{% url 'task_detail' task.id %}" class="dashboard-name-link">
+                    {{ task.title }}
+                </a>
+
+                <span>
+                    {% if task.is_completed %}
+                        Completed
+                    {% else %}
+                        Pending
+                    {% endif %}
+                </span>
+            </div>
+            {% empty %}
+            <p class="empty-message">No tasks yet.</p>
+            {% endfor %}
+        </section>
+
+        <!-- Deals by Stage -->
+        <section class="dashboard-section deals-by-stage">
+            <h2>Deals by Stage</h2>
+
+            {% for item in deals_by_stage %}
+            <div class="stage-row">
+                <div class="stage-info">
+                    <span>{{ item.stage|title }}</span>
+
+                    <span class="stage-details">
+                        {{ item.total }} deals ·
+                        {{ item.total_value|default_if_none:0 }}
+                    </span>
+                </div>
+
+                <div class="stage-bar">
+                    <div
+                        class="stage-progress stage-{{ item.stage }}"
+                        data-total="{{ item.total }}"
+                        data-deals-count="{{ deals_count }}">
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p class="empty-message">No deals yet.</p>
+            {% endfor %}
+        </section>
+
+        <!-- Upcoming Tasks -->
+        <section class="upcoming-tasks-card">
+
+            <h2 class="upcoming-tasks-title">Upcoming tasks</h2>
+
+            <div class="upcoming-tasks-list">
+                {% for task in upcoming_tasks %}
+
+                <div class="upcoming-task-item">
+
+                    <div class="upcoming-task-main">
+
+                        <form method="POST"
+                              action="{% url 'task_complete' task.id %}"
+                              class="upcoming-task-check-form">
+
+                            {% csrf_token %}
+
+                            <input
+                                type="checkbox"
+                                class="upcoming-task-checkbox"
+                                {% if task.is_completed %}checked{% endif %}
+                                onchange="this.form.submit()"
+                                aria-label="Mark task as completed"
+                            >
+                        </form>
+
+                        <div class="upcoming-task-content">
+
+                            <div class="upcoming-task-top">
+
+                                <a href="{% url 'task_detail' task.id %}"
+                                   class="upcoming-task-name">
+                                    {{ task.title }}
+                                </a>
+
+                                {% if task.due_date %}
+                                    {% if task.due_date|date:"Y-m-d" == today|date:"Y-m-d" %}
+                                        <span class="task-date-badge today">Today</span>
+                                    {% elif task.due_date|date:"Y-m-d" == tomorrow|date:"Y-m-d" %}
+                                        <span class="task-date-badge tomorrow">Tomorrow</span>
+                                    {% else %}
+                                        <span class="task-date-badge">
+                                            {{ task.due_date|date:"M d" }}
+                                        </span>
+                                    {% endif %}
+                                {% endif %}
+
+                                
+
+                            </div>
+
+                            <p class="upcoming-task-details">
+                                {% if task.contact %}
+                                    {{ task.contact }}
+                                {% endif %}
+
+                                {% if task.contact and task.deal %}
+                                    ·
+                                {% endif %}
+
+                                {% if task.deal %}
+                                    {{ task.deal }}
+                                {% endif %}
+                            </p>
+
+                        </div>
+                    </div>
+                </div>
+
+                {% empty %}
+                    <p class="empty-message">No upcoming tasks.</p>
+                {% endfor %}
+            </div>
+
+            <a href="{% url 'task_list' %}" class="all-tasks-link">
+                All tasks <span>→</span>
+            </a>
+
+        </section>
+
+    </div>
+</div>
+
+<script>
+document.querySelectorAll('.stage-progress').forEach(function(bar) {
+    const total = Number(bar.dataset.total);
+    const dealsCount = Number(bar.dataset.dealsCount);
+
+    const percentage = dealsCount > 0
+        ? (total / dealsCount) * 100
+        : 0;
+
+    bar.style.width = percentage + '%';
+});
+</script>
+{% endblock %}

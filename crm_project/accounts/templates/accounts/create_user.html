@@ -1,0 +1,62 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create User</title>
+    <link rel="stylesheet" href="{% static 'accounts/create_user.css' %}">
+</head>
+<body>
+    <div class="form-container">
+        <h1>Create New User</h1>
+        <p class="subtitle">Add a new user to the CRM system</p>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <label for="username">Username</label>
+            <input
+                type="text"
+                id="username"
+                name="username"
+                required
+                autocomplete="username"
+            >
+
+            <label for="password">Password</label>
+            <input
+                type="password"
+                id="password"
+                name="password"
+                required
+                autocomplete="new-password"
+            >
+
+            <label for="confirm_password">Confirm Password</label>
+            <input
+                type="password"
+                id="confirm_password"
+                name="confirm_password"
+                required
+                autocomplete="new-password"
+            >
+
+            <button type="submit">Create User</button>
+        </form>
+
+        <a class="back-link" href="{% url 'dashboard_home' %}">
+            Back to Dashboard
+        </a>
+    </div>
+</body>
+</html>

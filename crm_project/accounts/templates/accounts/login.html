@@ -1,0 +1,58 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | CRM</title>
+    <link rel="stylesheet" href="{% static 'accounts/login.css' %}">
+</head>
+<body>
+    <main class="login-page">
+        <section class="login-card">
+            <div class="login-brand">
+                <div class="brand-icon">C</div>
+                <h1>CRM System</h1>
+            </div>
+
+            <h2>Welcome back</h2>
+            <p class="login-subtitle">Sign in to your account to continue</p>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="login-message">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <label for="username">Username</label>
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Enter your username"
+                    autocomplete="username"
+                    required
+                >
+
+                <label for="password">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    autocomplete="current-password"
+                    required
+                >
+
+                <button type="submit">Sign in</button>
+            </form>
+
+            <p class="login-footer">CRM System · Manage your business better</p>
+        </section>
+    </main>
+</body>
+</html>

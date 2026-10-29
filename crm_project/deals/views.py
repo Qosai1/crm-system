@@ -8,8 +8,9 @@ from .models import Deal
 from .forms import DealForm
 from contacts.models import Contact
 import json
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def deal_list(request):
     deals = Deal.objects.select_related(
         'company',
@@ -41,7 +42,7 @@ def deal_list(request):
 
     return render(request, 'deals/deal_list.html', context)
 
-
+@login_required
 @require_POST
 @csrf_protect
 def update_deal_stage(request, pk):
@@ -73,7 +74,7 @@ def update_deal_stage(request, pk):
         'message': 'Deal stage updated successfully'
     })
 
-
+@login_required
 def deal_create(request):
     if request.method == 'POST':
         form = DealForm(request.POST)
@@ -89,7 +90,7 @@ def deal_create(request):
         'contacts': Contact.objects.all(),
     })
 
-
+@login_required
 def deal_edit(request, pk):
     deal = get_object_or_404(Deal, pk=pk)
 
@@ -108,7 +109,7 @@ def deal_edit(request, pk):
         'deal': deal,
     })
 
-
+@login_required
 def deal_delete(request, pk):
     deal = get_object_or_404(Deal, pk=pk)
 
@@ -120,7 +121,7 @@ def deal_delete(request, pk):
         'deal': deal,
     })
 
-
+@login_required
 def deal_detail(request, deal_id):
     deal = get_object_or_404(
         Deal.objects.select_related(

@@ -1,16 +1,13 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ contact.name }}</title>
+{% block title %}Companies | CRM System{% endblock %}
 
-    <link rel="stylesheet" href="{% static 'companies/style.css' %}">
-</head>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'companies/style.css' %}">
+{% endblock %}
 
-<body>
+{% block content %}
     <div class="container company-detail-page">
 
         <a href="{% url 'contact_list' %}" class="company-back-link">
@@ -238,6 +235,4 @@
 
         </div>
     </div>
-</body>
-
-</html>
+{% endblock %}

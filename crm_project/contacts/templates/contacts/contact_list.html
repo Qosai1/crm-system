@@ -1,37 +1,40 @@
+
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contacts</title>
+{% block title %}Contacts | CRM System{% endblock %}
 
-    <link rel="stylesheet" href="{% static 'companies/style.css' %}">
-</head>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'companies/style.css' %}">
+{% endblock %}
 
-<body>
+{% block content %}
 
-    <div class="container">
+<div class="container">
 
-        <div class="page-header">
-            <div>
-                <h1>Contacts</h1>
-            </div>
-
-            <div class="header-actions">
-                <form method="GET" action="{% url 'contact_list' %}" class="search-form">
-                    <input type="search" name="q" placeholder="Search contacts..." value="{{ query }}">
-                </form>
-
-                <a href="{% url 'contact_create' %}" class="btn-primary">
-                    + Add Contact
-                </a>
-            </div>
+    <div class="page-header">
+        <div>
+            <h1>Contacts</h1>
         </div>
 
-        <div class="table-card">
-            {% if contacts %}
+        <div class="header-actions">
+            <form method="GET" action="{% url 'contact_list' %}" class="search-form">
+                <input
+                    type="search"
+                    name="q"
+                    placeholder="Search contacts..."
+                    value="{{ query|default:'' }}"
+                >
+            </form>
+
+            <a href="{% url 'contact_create' %}" class="btn-primary">
+                + Add Contact
+            </a>
+        </div>
+    </div>
+
+    <div class="table-card">
+        {% if contacts %}
             <table class="companies-table">
                 <thead>
                     <tr>
@@ -47,56 +50,106 @@
 
                 <tbody>
                     {% for contact in contacts %}
-                    <tr>
-                        <td>
-                            <a href="{% url 'contact_detail' contact.id %}" class="contact-name-link">
-                                {{ contact.name }}
-                            </a>
-                        </td>
-                        <td>{{ contact.company.name }}</td>
-                        <td>{{ contact.job_title|default:"—" }}</td>
-                        <td>{{ contact.email|default:"—" }}</td>
-                        <td>{{ contact.phone|default:"—" }}</td>
-                        <td>
-                            {% for deal in contact.deals.all %}
-                            <a href="{% url 'deal_detail' deal.id %}" class="contact-name-link">
-                                {{ deal.title }}
-                            </a>{% if not forloop.last %}, {% endif %}
-                            {% empty %}
-                            0
-                            {% endfor %}
-                        </td>
+                        <tr>
+                            <td>
+                                <a href="{% url 'contact_detail' contact.id %}" class="contact-name-link">
+                                    {{ contact.name }}
+                                </a>
+                            </td>
 
-                        <td class="actions-cell">
-                            <a href="{% url 'contact_edit' contact.id %}" class="btn-edit">
-                                Edit
-                            </a>
+                            <td>
+                                {{ contact.company.name|default:"—" }}
+                            </td>
 
-                            <button type="button" class="btn-delete"
-                                onclick="openDeleteModal('{{ contact.id }}', '{{ contact.name|escapejs }}')">
-                                Delete
-                            </button>
-                        </td>
+                            <td>
+                                {{ contact.job_title|default:"—" }}
+                            </td>
 
-                    </tr>
+                            <td>
+                                {{ contact.email|default:"—" }}
+                            </td>
+
+                            <td>
+                                {{ contact.phone|default:"—" }}
+                            </td>
+
+                            <td>
+                                {% for deal in contact.deals.all %}
+                                    <a href="{% url 'deal_detail' deal.id %}" class="contact-name-link">
+                                        {{ deal.title }}
+                                    </a>{% if not forloop.last %}, {% endif %}
+                                {% empty %}
+                                    0
+                                {% endfor %}
+                            </td>
+
+                            <td class="actions-cell">
+                                <a href="{% url 'contact_edit' contact.id %}" class="btn-edit">
+                                    Edit
+                                </a>
+
+                                <button
+                                    type="button"
+                                    class="btn-delete"
+                                    onclick="openDeleteModal('{{ contact.id }}', '{{ contact.name|escapejs }}')">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
                     {% endfor %}
                 </tbody>
             </table>
-            {% else %}
+        {% else %}
             <div class="empty-message">
                 <p>No contacts found.</p>
                 <p>Add your first contact to get started.</p>
             </div>
-            {% endif %}
-        </div>
-
+        {% endif %}
     </div>
 
-    <script>
-        const searchInput = document.querySelector('.search-form input');
-        const searchForm = document.querySelector('.search-form');
-        let searchTimer;
+</div>
 
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="company-delete-overlay">
+    <div class="company-delete-card">
+        <div class="company-delete-icon">!</div>
+
+        <h2>Delete Contact?</h2>
+
+        <p>
+            Are you sure you want to delete
+            <strong id="deleteContactName"></strong>?
+        </p>
+
+        <p class="company-delete-warning">
+            This action cannot be undone.
+        </p>
+
+        <form id="deleteForm" method="POST">
+            {% csrf_token %}
+
+            <div class="company-delete-actions">
+                <button
+                    type="button"
+                    class="btn-edit"
+                    onclick="closeDeleteModal()">
+                    Cancel
+                </button>
+
+                <button type="submit" class="btn-delete">
+                    Yes, Delete
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const searchInput = document.querySelector('.search-form input');
+    const searchForm = document.querySelector('.search-form');
+    let searchTimer;
+
+    if (searchInput && searchForm) {
         searchInput.addEventListener('input', function () {
             clearTimeout(searchTimer);
 
@@ -109,64 +162,49 @@
                 searchForm.requestSubmit();
             }, 500);
         });
-    </script>
+    }
+</script>
 
-    <div id="deleteModal" class="company-delete-overlay">
-        <div class="company-delete-card">
-            <div class="company-delete-icon">!</div>
+<script>
+    function openDeleteModal(contactId, contactName) {
+        const modal = document.getElementById('deleteModal');
+        const contactNameElement = document.getElementById('deleteContactName');
+        const deleteForm = document.getElementById('deleteForm');
 
-            <h2>Delete Contact?</h2>
-
-            <p>
-                Are you sure you want to delete
-                <strong id="deleteContactName"></strong>?
-            </p>
-
-            <p class="company-delete-warning">
-                This action cannot be undone.
-            </p>
-
-            <form id="deleteForm" method="POST">
-                {% csrf_token %}
-
-                <div class="company-delete-actions">
-                    <button type="button" class="btn-edit" onclick="closeDeleteModal()">
-                        Cancel
-                    </button>
-
-                    <button type="submit" class="btn-delete">
-                        Yes, Delete
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-    <script>
-        function openDeleteModal(contactId, contactName) {
-            document.getElementById('deleteContactName').textContent = contactName;
-
-            document.getElementById('deleteForm').action =
-                `/contacts/${contactId}/delete/`;
-
-            document.getElementById('deleteModal').classList.add('active');
+        if (!modal || !contactNameElement || !deleteForm) {
+            console.error('Delete modal elements were not found.');
+            return;
         }
 
-        function closeDeleteModal() {
-            document.getElementById('deleteModal').classList.remove('active');
-        }
+        contactNameElement.textContent = contactName;
+        deleteForm.action = `/contacts/${contactId}/delete/`;
 
-        document.getElementById('deleteModal').addEventListener('click', function (event) {
-            if (event.target === this) {
+        modal.classList.add('active');
+    }
+
+    function closeDeleteModal() {
+        const modal = document.getElementById('deleteModal');
+
+        if (modal) {
+            modal.classList.remove('active');
+        }
+    }
+
+    const deleteModal = document.getElementById('deleteModal');
+
+    if (deleteModal) {
+        deleteModal.addEventListener('click', function (event) {
+            if (event.target === deleteModal) {
                 closeDeleteModal();
             }
         });
+    }
 
-        document.addEventListener('keydown', function (event) {
-            if (event.key === 'Escape') {
-                closeDeleteModal();
-            }
-        });
-    </script>
-</body>
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+            closeDeleteModal();
+        }
+    });
+</script>
 
-</html>
+{% endblock %}

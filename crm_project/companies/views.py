@@ -5,9 +5,9 @@ from django.db.models import Sum
 
 from .forms import CompanyForm
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 
-
-
+@login_required
 def company_list(request):
     query = request.GET.get('q','').strip()
 
@@ -32,7 +32,7 @@ def company_list(request):
         }
 
     return render(request,'companies/company_list.html',context)
-
+@login_required
 def company_create(request):
     if request.method == 'POST':
         form = CompanyForm(request.POST)
@@ -47,7 +47,7 @@ def company_create(request):
         'form': form
     })
 
-
+@login_required
 def company_edit(request,company_id):
     company = Company.objects.get(id=company_id)
 
@@ -66,7 +66,7 @@ def company_edit(request,company_id):
     })   
 
 
-
+@login_required
 def company_delete(request, company_id):
     company = get_object_or_404(Company, id=company_id)
 
@@ -79,7 +79,7 @@ def company_delete(request, company_id):
     })
 
 
-
+@login_required
 def company_detail(request, company_id):
     
     company = get_object_or_404(Company, pk=company_id)

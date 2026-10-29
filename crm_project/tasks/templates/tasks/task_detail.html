@@ -1,16 +1,20 @@
 
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ task.title }} | Task Details</title>
-<link rel="stylesheet" href="{% static 'tasks/task_detail.css' %}"></head>
-<body>
+
+{% block title %}{{ task.title }} | Task Details{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'tasks/task_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="task-details-page">
 
     <header class="tasks-header">
         <h1>Task Details</h1>
+
         <a href="{% url 'task_list' %}" class="new-task-button">
             ← All Tasks
         </a>
@@ -77,8 +81,11 @@
 
         <hr>
 
-        <a href="{% url 'task_edit' task.id %}">Edit Task</a>
+        <a href="{% url 'task_edit' task.id %}" class="btn-edit">
+            Edit Task
+        </a>
     </section>
 
-</body>
-</html>
+</div>
+
+{% endblock %}

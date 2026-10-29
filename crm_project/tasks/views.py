@@ -6,8 +6,10 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
 from django.utils import timezone
 from deals.models import Deal
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
 def task_list(request):
     tasks = Task.objects.select_related(
         'contact',
@@ -55,7 +57,7 @@ def task_list(request):
 
 
 
-
+@login_required
 def task_create(request):
     deal_id = request.GET.get('deal') or request.POST.get('deal')
     deal = None
@@ -87,7 +89,7 @@ def task_create(request):
     )
 
 
-
+@login_required
 @require_POST
 def task_complete(request, task_id):
     task = get_object_or_404(Task, id=task_id)
@@ -99,7 +101,7 @@ def task_complete(request, task_id):
         request.META.get('HTTP_REFERER', '/tasks/')
     )
 
-
+@login_required
 @require_POST
 def task_delete(request, task_id):
     task = get_object_or_404(Task, id=task_id)
@@ -107,7 +109,7 @@ def task_delete(request, task_id):
 
     return redirect('task_list')
 
-
+@login_required
 def task_edit(request, task_id):
     task = get_object_or_404(Task, id=task_id)
 
@@ -128,7 +130,7 @@ def task_edit(request, task_id):
             'task': task,
         }
     )
-
+@login_required
 def task_detail(request, task_id):
     task = get_object_or_404(
         Task.objects.select_related('contact', 'deal'),

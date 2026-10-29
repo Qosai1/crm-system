@@ -1,0 +1,130 @@
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f7f8fc;
+    color: #202b3c;
+}
+
+.app-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    min-width: 250px;
+    min-height: 100vh;
+    padding: 28px 16px;
+    background: #fff;
+    border-right: 1px solid #e8ebf2;
+}
+
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 12px 32px;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.brand-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: #e9f2ff;
+    color: #2878e5;
+}
+
+.brand-icon svg {
+    width: 23px;
+    height: 23px;
+    stroke-width: 2;
+}
+
+/* Navigation */
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 13px 14px;
+    border-radius: 9px;
+    text-decoration: none;
+    color: #667085;
+    font-size: 13px;
+    font-weight: 500;
+    transition: background 0.2s, color 0.2s;
+}
+
+.sidebar-link > svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    stroke-width: 1.8;
+}
+
+.sidebar-link > span {
+    width: auto;
+    text-align: left;
+    font-size: inherit;
+}
+
+.sidebar-link:hover,
+.sidebar-link.active {
+    background: #eaf2ff;
+    color: #2878e5;
+}
+
+.sidebar-link.active {
+    font-weight: 600;
+}
+
+/* Main content */
+.main-content {
+    flex: 13px;
+    min-width: 0;
+    padding: 32px;
+}
+
+input[type="submit"],
+button {
+    background-color: #c3c4c7;
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+input[type="submit"]:hover,
+button:hover {
+    background-color: #1d4ed8;
+}
+
+.welcome-user {
+    display: block;
+    color: rgb(104, 98, 98);
+    font-size: 14px;
+    font-weight: 600;
+    padding: 12px 15px;
+    margin: 10px 0;
+    background-color: #eff0f1;
+    border-radius: 8px;
+}
