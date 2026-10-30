@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Companies | CRM System{% endblock %}
+{% block title %}Companies{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'companies/style.css' %}">
@@ -48,9 +48,6 @@
                     Edit
                 </a>
 
-                <a href="{% url 'contact_delete' contact.id %}" class="detail-action-btn detail-delete-btn">
-                    Delete
-                </a>
             </div>
 
         </div>
@@ -109,11 +106,6 @@
                 </section>
 
 
-
-
-
-
-
                 <section class="deal-detail-panel">
                     <h3>
                         Tasks
@@ -170,10 +162,6 @@
                     </div>
                     {% endif %}
                 </section>
-
-
-
-
 
             </main>
 

@@ -1,8 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from .models import Contact
 from .forms import ContactForm
 from django.db.models import Q
-from django.shortcuts import get_object_or_404
 from django.db.models import Sum
 from deals.models import Deal
 from tasks.models import Task
@@ -47,8 +46,7 @@ def contact_create(request):
 
 @login_required
 def contact_edit(request, contact_id):
-    contact = Contact.objects.get(id=contact_id)
-
+    contact = get_object_or_404(Contact, id=contact_id)
     if request.method == 'POST':
         form = ContactForm(request.POST, instance=contact)
 

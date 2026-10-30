@@ -1,8 +1,6 @@
-from django.shortcuts import render,redirect
 from django.db.models import Q, Count
 from .models import Company
 from django.db.models import Sum
-
 from .forms import CompanyForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -49,7 +47,7 @@ def company_create(request):
 
 @login_required
 def company_edit(request,company_id):
-    company = Company.objects.get(id=company_id)
+    company = get_object_or_404(Company, id=company_id)
 
     if request.method == 'POST':
         form = CompanyForm(request.POST,instance=company)

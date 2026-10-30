@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Tasks | CRM System{% endblock %}
+{% block title %}Tasks{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'tasks/style.css' %}">
@@ -65,11 +65,7 @@
                         <div class="task-menu-content">
                             <a href="{% url 'task_edit' task.id %}">Edit</a>
 
-                            <form method="POST" action="{% url 'task_delete' task.id %}"
-                                onsubmit="return confirm('Are you sure you want to delete this task?');">
-                                {% csrf_token %}
-                                <button type="submit">Delete</button>
-                            </form>
+                           
                         </div>
                     </details>
 
@@ -118,11 +114,7 @@
                         <div class="task-menu-content">
                             <a href="{% url 'task_edit' task.id %}">Edit</a>
 
-                            <form method="POST" action="{% url 'task_delete' task.id %}"
-                                onsubmit="return confirm('Are you sure you want to delete this task?');">
-                                {% csrf_token %}
-                                <button type="submit">Delete</button>
-                            </form>
+                           
                         </div>
                     </details>
                 </div>
@@ -172,11 +164,7 @@
                         <div class="task-menu-content">
                             <a href="{% url 'task_edit' task.id %}">Edit</a>
 
-                            <form method="POST" action="{% url 'task_delete' task.id %}"
-                                onsubmit="return confirm('Are you sure you want to delete this task?');">
-                                {% csrf_token %}
-                                <button type="submit">Delete</button>
-                            </form>
+                            
                         </div>
                     </details>
                 </div>
@@ -213,13 +201,7 @@
                         <div class="task-menu-content">
                             <a href="{% url 'task_edit' task.id %}">Edit</a>
 
-                            <form method="POST" action="{% url 'task_delete' task.id %}"
-                                onsubmit="return confirm('Are you sure you want to delete this task?');">
-                                {% csrf_token %}
-                                <button type="submit">Delete</button>
-                            </form>
-                        </div>
-                    </details>
+                           
                 </div>
 
                 {% if task.description %}

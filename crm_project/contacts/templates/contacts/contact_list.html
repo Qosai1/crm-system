@@ -2,7 +2,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Contacts | CRM System{% endblock %}
+{% block title %}Contacts{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'companies/style.css' %}">
@@ -44,7 +44,6 @@
                         <th>Email</th>
                         <th>Phone</th>
                         <th>Deal</th>
-                        <th>Actions</th>
                     </tr>
                 </thead>
 
@@ -83,18 +82,6 @@
                                 {% endfor %}
                             </td>
 
-                            <td class="actions-cell">
-                                <a href="{% url 'contact_edit' contact.id %}" class="btn-edit">
-                                    Edit
-                                </a>
-
-                                <button
-                                    type="button"
-                                    class="btn-delete"
-                                    onclick="openDeleteModal('{{ contact.id }}', '{{ contact.name|escapejs }}')">
-                                    Delete
-                                </button>
-                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -107,41 +94,6 @@
         {% endif %}
     </div>
 
-</div>
-
-<!-- Delete Confirmation Modal -->
-<div id="deleteModal" class="company-delete-overlay">
-    <div class="company-delete-card">
-        <div class="company-delete-icon">!</div>
-
-        <h2>Delete Contact?</h2>
-
-        <p>
-            Are you sure you want to delete
-            <strong id="deleteContactName"></strong>?
-        </p>
-
-        <p class="company-delete-warning">
-            This action cannot be undone.
-        </p>
-
-        <form id="deleteForm" method="POST">
-            {% csrf_token %}
-
-            <div class="company-delete-actions">
-                <button
-                    type="button"
-                    class="btn-edit"
-                    onclick="closeDeleteModal()">
-                    Cancel
-                </button>
-
-                <button type="submit" class="btn-delete">
-                    Yes, Delete
-                </button>
-            </div>
-        </form>
-    </div>
 </div>
 
 <script>
@@ -163,48 +115,6 @@
             }, 500);
         });
     }
-</script>
-
-<script>
-    function openDeleteModal(contactId, contactName) {
-        const modal = document.getElementById('deleteModal');
-        const contactNameElement = document.getElementById('deleteContactName');
-        const deleteForm = document.getElementById('deleteForm');
-
-        if (!modal || !contactNameElement || !deleteForm) {
-            console.error('Delete modal elements were not found.');
-            return;
-        }
-
-        contactNameElement.textContent = contactName;
-        deleteForm.action = `/contacts/${contactId}/delete/`;
-
-        modal.classList.add('active');
-    }
-
-    function closeDeleteModal() {
-        const modal = document.getElementById('deleteModal');
-
-        if (modal) {
-            modal.classList.remove('active');
-        }
-    }
-
-    const deleteModal = document.getElementById('deleteModal');
-
-    if (deleteModal) {
-        deleteModal.addEventListener('click', function (event) {
-            if (event.target === deleteModal) {
-                closeDeleteModal();
-            }
-        });
-    }
-
-    document.addEventListener('keydown', function (event) {
-        if (event.key === 'Escape') {
-            closeDeleteModal();
-        }
-    });
 </script>
 
 {% endblock %}
