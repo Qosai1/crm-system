@@ -244,7 +244,12 @@ body{
 }
 
 
-
+.contact-name-link{
+    text-decoration: none;
+}
+.contact-name-link:hover{
+    text-decoration: underline;
+}
 .btn-edit{
     display: inline-flex;
     align-items: center;
