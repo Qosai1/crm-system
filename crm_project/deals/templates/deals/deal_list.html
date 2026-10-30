@@ -9,415 +9,423 @@
 
 {% block content %}
 
-    <div class="deals-page">
+<div class="deals-page">
 
-        <div class="deals-header">
-            <div>
-                <h1>Deals</h1>
+    <div class="deals-header">
+        <div>
+            <h1>Deals</h1>
 
-
-            </div>
-            <div class="deals-search">
-                <input type="text" id="dealSearchInput" placeholder="Search deals by title or company..."
-                    autocomplete="off">
-
-            </div>
-            <a href="{% url 'deal_create' %}" class="deal-create-btn">
-                + New Deal
-            </a>
 
         </div>
-
-
-
-
-        <div class="deals-summary">
-
-            <div class="deal-summary-card">
-                <span>Total Deals</span>
-                <h4 id="totalDealsCount">{{ deals|length }}</h4>
-            </div>
-
-            <div class="deal-summary-card">
-                <span>Open Deals</span>
-                <h4 id="openDealsCount">{{ open_deals_count }}</h4>
-            </div>
-
-            <div class="deal-summary-card">
-                <span>Won Deals</span>
-                <h4 id="wonDealsCount">{{ won_deals_count }}</h4>
-            </div>
-
-            <div class="deal-summary-card">
-                <span>Lost Deals</span>
-                <h4 id="lostDealsCount">{{ lost_deals_count }}</h4>
-            </div>
+        <div class="deals-search">
+            <input type="text" id="dealSearchInput" placeholder="Search deals by title or company..."
+                autocomplete="off">
 
         </div>
+        <a href="{% url 'deal_create' %}" class="deal-create-btn">
+            + New Deal
+        </a>
 
-        <div class="deals-board">
-
-            {% for column in columns %}
-            <section class="deal-column" data-stage="{{ column.code }}">
-
-                <div class="deal-column-header">
-
-                    <div class="deal-column-title">
-                        <span class="deal-stage-dot stage-{{ column.code }}"></span>
-                        <strong>{{ column.label }}</strong>
-                    </div>
-
-                    <span class="deal-count">
-                        {{ column.count }}
-                    </span>
-
-                </div>
-
-                <div class="deal-column-body" data-stage="{{ column.code }}">
-                    {% for deal in column.deals %}
-                    <article class="deal-card" draggable="true" data-deal-id="{{ deal.pk }}"
-                        data-stage="{{ deal.stage }}">
-
-                        <div class="deal-card-top">
-                            <a href="{% url 'deal_detail' deal.id %}" class="contact-name-link">
-                                {{ deal.title }}
-                            </a>
-
-                            <span class="deal-value">
-                                {{ deal.value }}$
-                            </span>
-                        </div>
-
-                        <p class="deal-company">
-                            {{ deal.company.name }}
-                        </p>
-
-                        <div class="deal-card-footer">
-
-                            <span>
-
-                                {{ deal.contact.name }}
-
-                            </span>
-
-                            <span>
-                                {% if deal.expected_close_date %}
-                                {{ deal.expected_close_date|date:"M d, Y" }}
-                                {% else %}
-                                No date
-                                {% endif %}
-                            </span>
-
-                            <div class="deal-stage-select">
-                                <label for="deal-stage-{{ deal.pk }}">Stage</label>
-
-                                <select id="deal-stage-{{ deal.pk }}" class="deal-stage-dropdown"
-                                    data-deal-id="{{ deal.pk }}" data-stage="{{ deal.stage }}">
-                                    {% for stage_code, stage_label in stages %}
-                                    <option value="{{ stage_code }}" {% if deal.stage == stage_code %}selected{% endif %}>
-                                        {{ stage_label }}
-                                    </option>
-                                    {% endfor %}
-                                </select>
-                            </div>
+    </div>
 
 
-                            <div class="deal-card-actions">
-                                <a href="{% url 'deal_edit' deal.pk %}" class="deal-edit-btn">
-                                    Edit
-                                </a>
 
-                            </div>
 
-                        </div>
+    <div class="deals-summary">
 
-                    </article>
+        <div class="deal-summary-card">
+            <span>Total Deals</span>
+            <h4 id="totalDealsCount">{{ deals|length }}</h4>
+        </div>
 
-                    {% empty %}
-                    <p class="deals-empty">
-                        No deals in this stage
-                    </p>
-                    {% endfor %}
+        <div class="deal-summary-card">
+            <span>Open Deals</span>
+            <h4 id="openDealsCount">{{ open_deals_count }}</h4>
+        </div>
 
-                </div>
+        <div class="deal-summary-card">
+            <span>Won Deals</span>
+            <h4 id="wonDealsCount">{{ won_deals_count }}</h4>
+        </div>
 
-            </section>
-            {% endfor %}
-
+        <div class="deal-summary-card">
+            <span>Lost Deals</span>
+            <h4 id="lostDealsCount">{{ lost_deals_count }}</h4>
         </div>
 
     </div>
 
-   
+    <div class="deals-board">
 
-    <script>
-        const dealCards = document.querySelectorAll('.deal-card');
-        const dealColumns = document.querySelectorAll('.deal-column-body');
+        {% for column in columns %}
+        <section class="deal-column" data-stage="{{ column.code }}">
 
-        // Get CSRF token from Django's cookie
-        function getCSRFToken() {
-            const cookie = document.cookie
-                .split('; ')
-                .find(row => row.startsWith('csrftoken='));
+            <div class="deal-column-header">
 
-            return cookie ? cookie.split('=')[1] : '';
-        }
+                <div class="deal-column-title">
+                    <span class="deal-stage-dot stage-{{ column.code }}"></span>
+                    <strong>{{ column.label }}</strong>
+                </div>
 
-        // Make deal cards draggable
-        dealCards.forEach(card => {
-            card.addEventListener('dragstart', function (event) {
-                event.dataTransfer.setData(
-                    'text/plain',
-                    this.dataset.dealId
-                );
+                <span class="deal-count">
+                    {{ column.count }}
+                </span>
 
-                this.classList.add('dragging');
-            });
+            </div>
 
-            card.addEventListener('dragend', function () {
-                this.classList.remove('dragging');
-            });
+            <div class="deal-column-body" data-stage="{{ column.code }}">
+                {% for deal in column.deals %}
+                <article class="deal-card" draggable="true" data-deal-id="{{ deal.pk }}" data-stage="{{ deal.stage }}">
+
+                    <div class="deal-card-top">
+                        <a href="{% url 'deal_detail' deal.id %}" class="contact-name-link">
+                            {{ deal.title }}
+                        </a>
+
+                        <span class="deal-value">
+                            {{ deal.value }}$
+                        </span>
+                    </div>
+
+                    <p class="deal-company">
+                        {{ deal.company.name }}
+                    </p>
+
+                    <div class="deal-card-footer">
+
+                        <span>
+
+                            {{ deal.contact.name }}
+
+                        </span>
+
+                        <span>
+                            {% if deal.expected_close_date %}
+                            {{ deal.expected_close_date|date:"M d, Y" }}
+                            {% else %}
+                            No date
+                            {% endif %}
+                        </span>
+
+                        <div class="deal-stage-select">
+                            <label for="deal-stage-{{ deal.pk }}">Stage</label>
+
+                            <select id="deal-stage-{{ deal.pk }}" class="deal-stage-dropdown"
+                                data-deal-id="{{ deal.pk }}" data-stage="{{ deal.stage }}">
+                                {% for stage_code, stage_label in stages %}
+                                <option value="{{ stage_code }}" {% if deal.stage == stage_code %}selected{% endif %}>
+                                    {{ stage_label }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+
+                        <div class="deal-card-actions">
+                            <a href="{% url 'deal_edit' deal.pk %}" class="deal-edit-btn">
+                                Edit
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+                {% empty %}
+                <p class="deals-empty">
+                    No deals in this stage
+                </p>
+                {% endfor %}
+
+            </div>
+
+        </section>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+
+
+<script>
+    const dealCards = document.querySelectorAll('.deal-card');
+    const dealColumns = document.querySelectorAll('.deal-column-body');
+
+    // Get CSRF token from Django's cookie
+    function getCSRFToken() {
+        const cookie = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('csrftoken='));
+
+        return cookie ? cookie.split('=')[1] : '';
+    }
+
+    // Make deal cards draggable
+    dealCards.forEach(card => {
+        card.addEventListener('dragstart', function (event) {
+            event.dataTransfer.setData(
+                'text/plain',
+                this.dataset.dealId
+            );
+
+            this.classList.add('dragging');
         });
 
-        // Allow dropping deals into columns
-        dealColumns.forEach(column => {
-            column.addEventListener('dragover', function (event) {
-                event.preventDefault();
-                this.classList.add('drag-over');
-            });
+        card.addEventListener('dragend', function () {
+            this.classList.remove('dragging');
+        });
+    });
 
-            column.addEventListener('dragleave', function (event) {
-                if (!this.contains(event.relatedTarget)) {
-                    this.classList.remove('drag-over');
-                }
-            });
+    // Allow dropping deals into columns
+    dealColumns.forEach(column => {
+        column.addEventListener('dragover', function (event) {
+            event.preventDefault();
+            this.classList.add('drag-over');
+        });
 
-            column.addEventListener('drop', async function (event) {
-                event.preventDefault();
+        column.addEventListener('dragleave', function (event) {
+            if (!this.contains(event.relatedTarget)) {
                 this.classList.remove('drag-over');
+            }
+        });
 
-                const dealId = event.dataTransfer.getData('text/plain');
-                const card = document.querySelector(
-                    `.deal-card[data-deal-id="${dealId}"]`
+        column.addEventListener('drop', async function (event) {
+            event.preventDefault();
+            this.classList.remove('drag-over');
+
+            const dealId = event.dataTransfer.getData('text/plain');
+            const card = document.querySelector(
+                `.deal-card[data-deal-id="${dealId}"]`
+            );
+
+            if (!card) return;
+
+            const oldColumn = card.closest('.deal-column-body');
+            const oldStage = card.dataset.stage;
+            const newStage = this.dataset.stage;
+
+            // Do nothing if the deal is dropped in its current stage
+            if (!oldColumn || oldStage === newStage) return;
+
+            const oldEmptyMessage = oldColumn.querySelector('.deals-empty');
+            const newEmptyMessage = this.querySelector('.deals-empty');
+
+            // Save original position in case the request fails
+            const originalNextSibling = card.nextElementSibling;
+
+            // Move card immediately in the UI
+            if (newEmptyMessage) newEmptyMessage.remove();
+            this.appendChild(card);
+
+            card.dataset.stage = newStage;
+
+            // Update the dropdown inside the card
+            const stageDropdown = card.querySelector('.deal-stage-dropdown');
+
+            if (stageDropdown) {
+                stageDropdown.value = newStage;
+                stageDropdown.dataset.stage = newStage;
+            }
+
+            updateColumnCounts();
+
+            try {
+                const response = await fetch(
+                    `/deals/${dealId}/update-stage/`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCSRFToken()
+                        },
+                        body: JSON.stringify({
+                            stage: newStage
+                        })
+                    }
                 );
 
-                if (!card) return;
+                const result = await response.json();
 
-                const oldColumn = card.closest('.deal-column-body');
-                const oldStage = card.dataset.stage;
-                const newStage = this.dataset.stage;
+                if (!response.ok || !result.success) {
+                    throw new Error(
+                        result.error || 'Could not update deal stage'
+                    );
+                }
 
-                // Do nothing if the deal is dropped in its current stage
-                if (!oldColumn || oldStage === newStage) return;
+                // Show empty message in the old column if needed
+                if (!oldColumn.querySelector('.deal-card')) {
+                    oldColumn.innerHTML =
+                        '<p class="deals-empty">No deals in this stage</p>';
+                }
 
-                const oldEmptyMessage = oldColumn.querySelector('.deals-empty');
-                const newEmptyMessage = this.querySelector('.deals-empty');
+            } catch (error) {
+                console.error('Stage update failed:', error);
 
-                // Save original position in case the request fails
-                const originalNextSibling = card.nextElementSibling;
+                // Restore card to its original column and position
+                if (originalNextSibling &&
+                    originalNextSibling.parentElement === oldColumn) {
+                    oldColumn.insertBefore(card, originalNextSibling);
+                } else {
+                    oldColumn.appendChild(card);
+                }
 
-                // Move card immediately in the UI
-                if (newEmptyMessage) newEmptyMessage.remove();
-                this.appendChild(card);
-                card.dataset.stage = newStage;
+                card.dataset.stage = oldStage;
+
+                if (oldEmptyMessage && !oldColumn.querySelector('.deals-empty')) {
+                    oldColumn.appendChild(oldEmptyMessage);
+                }
 
                 updateColumnCounts();
+                alert('Failed to update deal stage. Please try again.');
+            }
+        });
+    });
 
-                try {
-                    const response = await fetch(
-                        `/deals/${dealId}/update-stage/`,
-                        {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRFToken': getCSRFToken()
-                            },
-                            body: JSON.stringify({
-                                stage: newStage
-                            })
-                        }
-                    );
+    // Update the deal counts displayed in column headers
 
-                    const result = await response.json();
+    function updateColumnCounts() {
+        const columns = document.querySelectorAll('.deal-column');
 
-                    if (!response.ok || !result.success) {
-                        throw new Error(
-                            result.error || 'Could not update deal stage'
-                        );
-                    }
+        let total = 0;
+        let open = 0;
+        let won = 0;
+        let lost = 0;
 
-                    // Show empty message in the old column if needed
-                    if (!oldColumn.querySelector('.deal-card')) {
-                        oldColumn.innerHTML =
-                            '<p class="deals-empty">No deals in this stage</p>';
-                    }
+        columns.forEach(column => {
+            const body = column.querySelector('.deal-column-body');
+            const count = column.querySelector('.deal-count');
 
-                } catch (error) {
-                    console.error('Stage update failed:', error);
+            if (!body) return;
 
-                    // Restore card to its original column and position
-                    if (originalNextSibling &&
-                        originalNextSibling.parentElement === oldColumn) {
-                        oldColumn.insertBefore(card, originalNextSibling);
-                    } else {
-                        oldColumn.appendChild(card);
-                    }
+            const cards = body.querySelectorAll('.deal-card');
+            const numberOfDeals = cards.length;
+            const stage = body.dataset.stage;
 
-                    card.dataset.stage = oldStage;
+            total += numberOfDeals;
 
-                    if (oldEmptyMessage && !oldColumn.querySelector('.deals-empty')) {
-                        oldColumn.appendChild(oldEmptyMessage);
-                    }
+            if (count) {
+                count.textContent = numberOfDeals;
+            }
 
-                    updateColumnCounts();
-                    alert('Failed to update deal stage. Please try again.');
-                }
-            });
+            if (stage === 'won') {
+                won += numberOfDeals;
+            } else if (stage === 'lost') {
+                lost += numberOfDeals;
+            } else {
+                open += numberOfDeals;
+            }
         });
 
-        // Update the deal counts displayed in column headers
+        document.getElementById('totalDealsCount').textContent = total;
+        document.getElementById('openDealsCount').textContent = open;
+        document.getElementById('wonDealsCount').textContent = won;
+        document.getElementById('lostDealsCount').textContent = lost;
+    }
 
-        function updateColumnCounts() {
-            const columns = document.querySelectorAll('.deal-column');
 
-            let total = 0;
-            let open = 0;
-            let won = 0;
-            let lost = 0;
+    document.querySelectorAll('.deal-stage-dropdown').forEach(select => {
+        select.addEventListener('change', async function () {
+            const dropdown = this;
+            const dealId = dropdown.dataset.dealId;
+            const newStage = dropdown.value;
+            const oldStage = dropdown.dataset.stage;
 
-            columns.forEach(column => {
+            const card = document.querySelector(
+                `.deal-card[data-deal-id="${dealId}"]`
+            );
+
+            if (!card || !oldStage || oldStage === newStage) return;
+
+            const oldColumn = card.closest('.deal-column-body');
+            const newColumn = document.querySelector(
+                `.deal-column-body[data-stage="${newStage}"]`
+            );
+
+            if (!oldColumn || !newColumn) return;
+
+            dropdown.disabled = true;
+
+            try {
+                const response = await fetch(
+                    `/deals/${dealId}/update-stage/`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCSRFToken()
+                        },
+                        body: JSON.stringify({stage: newStage})
+                    }
+                );
+
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    throw new Error(result.error || 'Update failed');
+                }
+
+                // Remove the empty message from the destination column
+                newColumn.querySelector('.deals-empty')?.remove();
+
+                // Move the deal immediately without refreshing
+                newColumn.appendChild(card);
+
+                card.dataset.stage = newStage;
+                dropdown.dataset.stage = newStage;
+
+                // Show empty message in the old column if needed
+                if (!oldColumn.querySelector('.deal-card')) {
+                    oldColumn.innerHTML =
+                        '<p class="deals-empty">No deals in this stage</p>';
+                }
+
+                // Update column counts and summary cards
+                updateColumnCounts();
+
+            } catch (error) {
+                console.error('Stage update failed:', error);
+                dropdown.value = oldStage;
+                alert('Failed to update the deal stage. Please try again.');
+            } finally {
+                dropdown.disabled = false;
+            }
+        });
+    });
+
+    const dealSearchInput = document.getElementById('dealSearchInput');
+
+    if (dealSearchInput) {
+        dealSearchInput.addEventListener('input', function () {
+            const searchText = this.value.trim().toLowerCase();
+
+            document.querySelectorAll('.deal-card').forEach(card => {
+                const title = card.querySelector('h3')?.textContent.toLowerCase() || '';
+                const company = card.querySelector('.deal-company')?.textContent.toLowerCase() || '';
+
+                const matches =
+                    title.includes(searchText) ||
+                    company.includes(searchText);
+
+                card.style.display = matches ? '' : 'none';
+            });
+
+            // Update visible counts while searching
+            document.querySelectorAll('.deal-column').forEach(column => {
                 const body = column.querySelector('.deal-column-body');
                 const count = column.querySelector('.deal-count');
 
-                if (!body) return;
-
-                const cards = body.querySelectorAll('.deal-card');
-                const numberOfDeals = cards.length;
-                const stage = body.dataset.stage;
-
-                total += numberOfDeals;
+                const visibleCards = [...body.querySelectorAll('.deal-card')]
+                    .filter(card => card.style.display !== 'none');
 
                 if (count) {
-                    count.textContent = numberOfDeals;
-                }
-
-                if (stage === 'won') {
-                    won += numberOfDeals;
-                } else if (stage === 'lost') {
-                    lost += numberOfDeals;
-                } else {
-                    open += numberOfDeals;
-                }
-            });
-
-            document.getElementById('totalDealsCount').textContent = total;
-            document.getElementById('openDealsCount').textContent = open;
-            document.getElementById('wonDealsCount').textContent = won;
-            document.getElementById('lostDealsCount').textContent = lost;
-        }
-
-
-        document.querySelectorAll('.deal-stage-dropdown').forEach(select => {
-            select.addEventListener('change', async function () {
-                const dropdown = this;
-                const dealId = dropdown.dataset.dealId;
-                const newStage = dropdown.value;
-                const oldStage = dropdown.dataset.stage;
-
-                const card = document.querySelector(
-                    `.deal-card[data-deal-id="${dealId}"]`
-                );
-
-                if (!card || !oldStage || oldStage === newStage) return;
-
-                const oldColumn = card.closest('.deal-column-body');
-                const newColumn = document.querySelector(
-                    `.deal-column-body[data-stage="${newStage}"]`
-                );
-
-                if (!oldColumn || !newColumn) return;
-
-                dropdown.disabled = true;
-
-                try {
-                    const response = await fetch(
-                        `/deals/${dealId}/update-stage/`,
-                        {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRFToken': getCSRFToken()
-                            },
-                            body: JSON.stringify({stage: newStage})
-                        }
-                    );
-
-                    const result = await response.json();
-
-                    if (!response.ok || !result.success) {
-                        throw new Error(result.error || 'Update failed');
-                    }
-
-                    // Remove the empty message from the destination column
-                    newColumn.querySelector('.deals-empty')?.remove();
-
-                    // Move the deal immediately without refreshing
-                    newColumn.appendChild(card);
-
-                    card.dataset.stage = newStage;
-                    dropdown.dataset.stage = newStage;
-
-                    // Show empty message in the old column if needed
-                    if (!oldColumn.querySelector('.deal-card')) {
-                        oldColumn.innerHTML =
-                            '<p class="deals-empty">No deals in this stage</p>';
-                    }
-
-                    // Update column counts and summary cards
-                    updateColumnCounts();
-
-                } catch (error) {
-                    console.error('Stage update failed:', error);
-                    dropdown.value = oldStage;
-                    alert('Failed to update the deal stage. Please try again.');
-                } finally {
-                    dropdown.disabled = false;
+                    count.textContent = visibleCards.length;
                 }
             });
         });
-
-        const dealSearchInput = document.getElementById('dealSearchInput');
-
-        if (dealSearchInput) {
-            dealSearchInput.addEventListener('input', function () {
-                const searchText = this.value.trim().toLowerCase();
-
-                document.querySelectorAll('.deal-card').forEach(card => {
-                    const title = card.querySelector('h3')?.textContent.toLowerCase() || '';
-                    const company = card.querySelector('.deal-company')?.textContent.toLowerCase() || '';
-
-                    const matches =
-                        title.includes(searchText) ||
-                        company.includes(searchText);
-
-                    card.style.display = matches ? '' : 'none';
-                });
-
-                // Update visible counts while searching
-                document.querySelectorAll('.deal-column').forEach(column => {
-                    const body = column.querySelector('.deal-column-body');
-                    const count = column.querySelector('.deal-count');
-
-                    const visibleCards = [...body.querySelectorAll('.deal-card')]
-                        .filter(card => card.style.display !== 'none');
-
-                    if (count) {
-                        count.textContent = visibleCards.length;
-                    }
-                });
-            });
-        }
+    }
 
 
-    </script>
+</script>
 {% endblock %}
