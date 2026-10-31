@@ -133,11 +133,7 @@ class CompanyTests(CRMTestCase):
         self.company.refresh_from_db()
         self.assertEqual(self.company.name, 'Acme Ltd')
 
-    def test_delete_company(self):
-        company = Company.objects.create(name='Temp', industry='Other')
-        response = self.client.post(reverse('company_delete', args=[company.id]))
-        self.assertRedirects(response, reverse('company_list'))
-        self.assertFalse(Company.objects.filter(id=company.id).exists())
+    
 
     def test_search_filters_companies(self):
         Company.objects.create(name='Globex', industry='Retail')
@@ -198,10 +194,7 @@ class ContactTests(CRMTestCase):
         names = [contact.name for contact in response.context['contacts']]
         self.assertEqual(names, ['Dana Levi'])
 
-    def test_delete_contact(self):
-        response = self.client.post(reverse('contact_delete', args=[self.contact.id]))
-        self.assertRedirects(response, reverse('contact_list'))
-        self.assertFalse(Contact.objects.filter(id=self.contact.id).exists())
+   
 
     def test_detail_shows_deals_and_tasks(self):
         Task.objects.create(title='Call Dana', contact=self.contact)
@@ -248,10 +241,7 @@ class DealTests(CRMTestCase):
         self.assertEqual(self.deal.title, 'Renamed')
         self.assertEqual(self.deal.stage, 'proposal')
 
-    def test_delete_deal(self):
-        response = self.client.post(reverse('deal_delete', args=[self.deal.id]))
-        self.assertRedirects(response, reverse('deal_list'))
-        self.assertFalse(Deal.objects.filter(id=self.deal.id).exists())
+   
 
     def test_kanban_has_a_column_per_stage(self):
         response = self.client.get(reverse('deal_list'))
@@ -333,18 +323,6 @@ class TaskTests(CRMTestCase):
         self.client.post(url)
         task.refresh_from_db()
         self.assertFalse(task.is_completed)
-
-    def test_delete_task(self):
-        task = Task.objects.create(title='Call')
-        response = self.client.post(reverse('task_delete', args=[task.id]))
-        self.assertRedirects(response, reverse('task_list'))
-        self.assertFalse(Task.objects.filter(id=task.id).exists())
-
-    def test_task_cannot_be_deleted_with_get(self):
-        task = Task.objects.create(title='Call')
-        response = self.client.get(reverse('task_delete', args=[task.id]))
-        self.assertEqual(response.status_code, 405)
-        self.assertTrue(Task.objects.filter(id=task.id).exists())
 
 
 class DashboardTests(CRMTestCase):

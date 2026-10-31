@@ -13,25 +13,23 @@
 <div class="container">
 
     <div class="page-header">
-        <div>
-            <h1>Contacts</h1>
-        </div>
+    <h1>Contacts</h1>
 
-        <div class="header-actions">
-            <form method="GET" action="{% url 'contact_list' %}" class="search-form">
-                <input
-                    type="search"
-                    name="q"
-                    placeholder="Search contacts..."
-                    value="{{ query|default:'' }}"
-                >
-            </form>
+    <div class="header-actions">
+        <form method="GET" action="{% url 'company_list' %}" class="search-form">
+            <input
+                type="search"
+                name="q"
+                placeholder="Search companies..."
+                value="{{ request.GET.q|default:'' }}"
+            >
+        </form>
 
-            <a href="{% url 'contact_create' %}" class="btn-primary">
-                + Add Contact
-            </a>
-        </div>
+        <a href="{% url 'contact_create' %}" class="btn-primary">
+            + Add Contact
+        </a>
     </div>
+</div>
 
     <div class="table-card">
         {% if contacts %}

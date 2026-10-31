@@ -6,7 +6,6 @@ from deals.models import Deal
 from tasks.models import Task
 from django.db.models import Count,Sum
 from datetime import timedelta
-from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 
 

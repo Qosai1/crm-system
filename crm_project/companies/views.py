@@ -65,19 +65,6 @@ def company_edit(request,company_id):
 
 
 @login_required
-def company_delete(request, company_id):
-    company = get_object_or_404(Company, id=company_id)
-
-    if request.method == 'POST':
-        company.delete()
-        return redirect('company_list')
-
-    return render(request, 'companies/company_confirm_delete.html', {
-        'company': company,
-    })
-
-
-@login_required
 def company_detail(request, company_id):
     
     company = get_object_or_404(Company, pk=company_id)

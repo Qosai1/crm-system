@@ -29,7 +29,7 @@
 
 
                         at
-                        <a href="{% url 'company_detail' contact.company.id %}">
+                        <a href="{% url 'company_detail' contact.company.id %}"class="contact-name-link">
                             {{ contact.company.name }}
                         </a>
 
@@ -41,7 +41,7 @@
                 <a href="{% url 'task_create' %}" class="detail-action-btn">
                     + New Task
                 </a>
-                <a href="{% url 'deal_create' %}?company={{ company.id }}" class="detail-action-btn"">
+                <a href="{% url 'deal_create' %}" class="detail-action-btn">
                     ＋ New Deal
                 </a>
                 <a href=" {% url 'contact_edit' contact.id %}" class="detail-action-btn">
@@ -118,7 +118,7 @@
                         <div class="deal-task-row">
                             <div class="deal-task-info">
                                 <strong>
-                                    <a href="{% url 'task_detail' task.id %}" class="deal-related-row">
+                                    <a href="{% url 'task_detail' task.id %}" class="contact-name-link">
                                         {{ task.title }}
                                     </a>
                                 </strong>

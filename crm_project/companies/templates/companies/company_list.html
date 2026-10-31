@@ -13,25 +13,23 @@
 <div class="container">
 
     <div class="page-header">
-        <div>
-            <h1>Companies</h1>
-        </div>
+    <h1>Companies</h1>
 
-        <div class="header-actions">
-            <form method="GET" action="{% url 'company_list' %}" class="search-form">
-                <input
-                    type="search"
-                    name="q"
-                    placeholder="Search companies..."
-                    value="{{ request.GET.q|default:'' }}"
-                >
-            </form>
+    <div class="header-actions">
+        <form method="GET" action="{% url 'company_list' %}" class="search-form">
+            <input
+                type="search"
+                name="q"
+                placeholder="Search companies..."
+                value="{{ request.GET.q|default:'' }}"
+            >
+        </form>
 
-            <a href="{% url 'addcompany' %}" class="btn-primary">
-                + Add Company
-            </a>
-        </div>
+        <a href="{% url 'addcompany' %}" class="btn-primary">
+            + Add Company
+        </a>
     </div>
+</div>
 
     <div class="table-card">
         {% if companies %}

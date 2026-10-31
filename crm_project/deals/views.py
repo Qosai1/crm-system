@@ -3,7 +3,6 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_protect
-from tasks.models import Task
 from .models import Deal
 from .forms import DealForm
 from contacts.models import Contact
@@ -110,18 +109,6 @@ def deal_edit(request, pk):
     })
 
 @login_required
-def deal_delete(request, pk):
-    deal = get_object_or_404(Deal, pk=pk)
-
-    if request.method == 'POST':
-        deal.delete()
-        return redirect('deal_list')
-
-    return render(request, 'deals/deal_confirm_delete.html', {
-        'deal': deal,
-    })
-
-@login_required
 def deal_detail(request, deal_id):
     deal = get_object_or_404(
         Deal.objects.select_related(
@@ -138,5 +125,4 @@ def deal_detail(request, deal_id):
         'deal': deal,
         'tasks': tasks,
         'open_tasks_count': tasks.filter(is_completed=False).count(),
-        'completed_tasks_count': tasks.filter(is_completed=True).count(),
     })

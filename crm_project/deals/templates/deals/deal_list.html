@@ -9,25 +9,26 @@
 
 {% block content %}
 
-<div class="deals-page">
+<div class="container">
 
-    <div class="deals-header">
-        <div>
-            <h1>Deals</h1>
+    <div class="page-header">
+    <h1>Deals</h1>
 
+    <div class="header-actions">
+        <form method="GET" action="{% url 'company_list' %}" class="search-form">
+            <input
+                type="search"
+                name="q"
+                placeholder="Search companies..."
+                value="{{ request.GET.q|default:'' }}"
+            >
+        </form>
 
-        </div>
-        <div class="deals-search">
-            <input type="text" id="dealSearchInput" placeholder="Search deals by title or company..."
-                autocomplete="off">
-
-        </div>
-        <a href="{% url 'deal_create' %}" class="deal-create-btn">
-            + New Deal
+        <a href="{% url 'deal_create' %}" class="btn-primary">
+            + Add Deal
         </a>
-
     </div>
-
+</div>
 
 
 

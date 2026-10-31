@@ -9,22 +9,26 @@
 
 {% block content %}
 
-<div class="tasks-page">
+<div class="container">
 
-    <header class="tasks-header">
-        <h1>Tasks</h1>
+    <div class="page-header">
+    <h1>Tasks</h1>
 
-        <div class="header-actions">
-            <form method="GET" action="{% url 'task_list' %}" class="search-form" id="task-search-form">
-                <input type="text" name="q" id="task-search-input" placeholder="Search tasks by name"
-                    value="{{ search_query|default:'' }}">
-            </form>
+    <div class="header-actions">
+        <form method="GET" action="{% url 'company_list' %}" class="search-form">
+            <input
+                type="search"
+                name="q"
+                placeholder="Search companies..."
+                value="{{ request.GET.q|default:'' }}"
+            >
+        </form>
 
-            <a href="{% url 'task_create' %}" class="new-task-button">
-                <span>+</span> New task
-            </a>
-        </div>
-    </header>
+        <a href="{% url 'task_create' %}" class="btn-primary">
+            + Add Tasks
+        </a>
+    </div>
+</div>
 
     <!-- Overdue Tasks -->
     <section class="task-section">
@@ -59,7 +63,7 @@
 
                     <details class="task-menu">
                         <summary title="Task actions">
-                            <i data-lucide="settings-2"></i>
+                           <summary title="Task actions">⚙</summary>
                         </summary>
 
                         <div class="task-menu-content">

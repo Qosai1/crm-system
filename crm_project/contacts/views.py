@@ -63,16 +63,6 @@ def contact_edit(request, contact_id):
 
 
 
-@login_required
-def contact_delete(request, contact_id):
-    contact = get_object_or_404(Contact, id=contact_id)
-
-    if request.method == 'POST':
-        contact.delete()
-        return redirect('contact_list')
-
-    return redirect('contact_list')
-
 
 @login_required
 def contact_detail(request, contact_id):

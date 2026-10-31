@@ -4,7 +4,8 @@ from django.contrib import messages
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
-from django import forms
+
+
 def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
