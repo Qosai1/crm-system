@@ -15,11 +15,11 @@
     <h1>Tasks</h1>
 
     <div class="header-actions">
-        <form method="GET" action="{% url 'company_list' %}" class="search-form">
+        <form method="GET" action="{% url 'task_list' %}" class="search-form">
             <input
                 type="search"
                 name="q"
-                placeholder="Search companies..."
+                placeholder="Search task..."
                 value="{{ request.GET.q|default:'' }}"
             >
         </form>

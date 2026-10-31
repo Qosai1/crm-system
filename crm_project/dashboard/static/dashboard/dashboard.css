@@ -14,7 +14,6 @@ body{
     padding: 0 14px;
 }
 
-
 .page-header {
     display: flex;
     justify-content: space-between;
@@ -29,8 +28,6 @@ body{
     margin: 0;
     color: #1f2937;
 }
-
-
 
 .dashboard-stats {
     display: grid;
@@ -92,7 +89,6 @@ body{
     font-size: 15px;
 }
 
-
 .stat-info h2 {
     margin: 0;
     color: #202b3c;
@@ -107,7 +103,6 @@ body{
     height: 20px;
     stroke-width: 2;
 }
-
 
 /* Dashboard sections */
 .dashboard-sections {
@@ -175,7 +170,6 @@ body{
     color: #175bb5;
     text-decoration: underline;
 }
-
 
 /* Deals by Stage */
 .deals-by-stage {
@@ -351,10 +345,6 @@ body{
     background: #fff0cc;
 }
 
-
-
-
-
 .upcoming-task-details {
     margin: 5px 0 0;
     color: #66758a;
@@ -377,7 +367,6 @@ body{
 .all-tasks-link:hover {
     color: #075ca5;
 }
-
 
 .task-menu-content {
     position: absolute;
@@ -424,7 +413,6 @@ body{
 .task-menu-content form {
     margin: 0;
 }
-
 
    /* DASHBOARD RESPONSIVE DESIGN */
 
@@ -519,7 +507,6 @@ body{
         font-size: 9px;
     }
 }
-
 
 /* Small mobile devices */
 @media (max-width: 480px) {

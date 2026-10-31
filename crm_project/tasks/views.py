@@ -55,8 +55,6 @@ def task_list(request):
     )
 
 
-
-
 @login_required
 def task_create(request):
     deal_id = request.GET.get('deal') or request.POST.get('deal')

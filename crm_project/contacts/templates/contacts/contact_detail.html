@@ -60,22 +60,22 @@
 
                     <div class="company-stat-card">
                         <span>Open deals</span>
-                        <strong>{{ open_deals_count }}</strong>
+                        <strong>{{ open_deals_count|default:0 }}</strong>
                     </div>
 
                     <div class="company-stat-card">
                         <span>Open value</span>
-                        <strong>${{ open_deals_value }}</strong>
+                        <strong>${{ open_deals_value|default:0 }}</strong>
                     </div>
 
                     <div class="company-stat-card">
                         <span>Won value</span>
-                        <strong>${{ won_deals_value }}</strong>
+                        <strong>${{ won_deals_value|default:0 }}</strong>
                     </div>
 
                     <div class="company-stat-card">
                         <span>Open tasks</span>
-                        <strong>{{ open_tasks_count }}</strong>
+                        <strong>{{ open_tasks_count|default:0 }}</strong>
                     </div>
 
                 </section>

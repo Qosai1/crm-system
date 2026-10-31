@@ -30,6 +30,7 @@ def company_list(request):
         }
 
     return render(request,'companies/company_list.html',context)
+
 @login_required
 def company_create(request):
     if request.method == 'POST':

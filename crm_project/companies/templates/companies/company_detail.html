@@ -23,7 +23,7 @@
                 <div>
                     <h1>{{ company.name }}</h1>
                     <p>
-                        {{ company.industry|default:"Company" }}
+                        {{ company.industry|default:"-" }}
 
                         · {{ company.city|default:"-" }}
 
@@ -55,29 +55,29 @@
                 <section class="company-stats-grid">
                     <div class="company-stat-card">
                         <span>Contacts</span>
-                        <strong>{{ company.contacts.count }}</strong>
+                        <strong>{{ company.contacts.count|default:0 }}</strong>
                     </div>
 
                     <div class="company-stat-card">
                         <span>Open deals</span>
-                        <strong>{{ open_deals_count }}</strong>
+                        <strong>{{ open_deals_count|default:0 }}</strong>
                     </div>
 
                     <div class="company-stat-card">
                         <span>Open value</span>
-                        <strong>${{ open_deals_value }}</strong>
+                        <strong>${{ open_deals_value|default:0 }}</strong>
                     </div>
 
                     <div class="company-stat-card">
                         <span>Won value</span>
-                        <strong>${{ won_deals_value}}</strong>
+                        <strong>${{ won_deals_value|default:0 }}</strong>
                     </div>
                 </section>
 
                 <section class="company-detail-panel">
                     <h2>
                         Contacts
-                        <span>{{ company.contacts.count }}</span>
+                        <span>{{ company.contacts.count|default:0  }}</span>
                     </h2>
 
                     {% for contact in company.contacts.all %}
@@ -111,7 +111,7 @@
                             <a href="{% url 'deal_detail' deal.id %}" class="contact-name-link">
                                 {{ deal.title }}
                             </a>
-                            <small>Value: ${{ deal.value|floatformat:2 }}</small>
+                            <small>Value: ${{ deal.value }}</small>
                         </div>
 
                         <span>{{ deal.get_stage_display }}</span>

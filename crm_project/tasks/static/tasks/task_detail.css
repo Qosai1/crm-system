@@ -1,6 +1,5 @@
 
 /* Task Details Page */
-
 body {
     margin: 0;
     padding: 0;
@@ -118,9 +117,7 @@ body {
     }
 }
 
-/* ============================= */
 /* Responsive - Task Details */
-/* ============================= */
 
 /* Tablets */
 @media (max-width: 768px) {
@@ -147,7 +144,6 @@ body {
         font-size: 14px;
     }
 }
-
 
 /* Mobile */
 @media (max-width: 480px) {

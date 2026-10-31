@@ -80,10 +80,7 @@ body{
     background: #4338ca;
 }
 
-
-
 /* Task Sections */
-
 
 .task-section {
     margin-bottom: 14px;
@@ -109,9 +106,7 @@ body{
     font-weight: 400;
 }
 
-
 /* Individual Task */
-
 
 .task-item {
     padding: 8px 0;
@@ -312,8 +307,6 @@ body{
     color: #8994a5;
     font-size: 11px;
 }
-
-
 
 /* Task priority badges */
 

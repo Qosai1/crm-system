@@ -33,8 +33,6 @@ body{
 
 }
 
-
-
 .deal-back-link {
     display: inline-block;
     margin-bottom: 24px;
@@ -104,8 +102,6 @@ body{
     cursor: pointer;
     text-decoration: none;
 }
-
-
 
 .deal-details-grid {
     display: grid;
@@ -241,10 +237,6 @@ body{
     overflow-wrap: anywhere;
 }
 
-
-
-
-
 /* DEALS DASHBOARD */
 
 .container{
@@ -318,8 +310,6 @@ body{
     background: #4338ca;
 }
 
-
-
 /* Summary Cards */
 
 .deals-summary {
@@ -381,7 +371,6 @@ body{
     font-weight: 600;
     color: #0f172a;
 }
-
 
 /* Kanban Board */
 
@@ -546,7 +535,6 @@ body{
     text-decoration: underline;
 }
 
-
 .deal-card-top h3 {
     margin: 0;
     color: #202a3d;
@@ -637,9 +625,7 @@ body{
 }
 
 
-/* ==========================
-   Create Deal Form Only
-========================== */
+   /* Create Deal Form Only */
 
 .deal-create-page {
     max-width: 1000px;
@@ -776,13 +762,6 @@ body{
     background: #f8fafc;
 }
 
-
-
-
-
-
-
-
 /* Deal Card Actions */
 .deal-card-actions {
     display: flex;
@@ -819,10 +798,6 @@ body{
     transform: translateY(-1px);
 }
 
-
-
-
-
 .deal-card {
     cursor: grab;
     transition: opacity 0.2s ease, transform 0.2s ease;
@@ -848,10 +823,6 @@ body{
     outline-offset: -4px;
     border-radius: 8px;
 }
-
-
-
-
 
 .deal-stage-select {
     display: flex;
@@ -999,7 +970,6 @@ body{
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
-
 
    /* DEALS RESPONSIVE DESIGN */
 
@@ -1157,7 +1127,6 @@ body{
         gap: 17px;
     }
 }
-
 
 /* Small mobile phones */
 @media (max-width: 480px) {

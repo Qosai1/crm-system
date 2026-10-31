@@ -8,19 +8,34 @@ from .forms import DealForm
 from contacts.models import Contact
 import json
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+
+@login_required
 
 @login_required
 def deal_list(request):
+    query = request.GET.get('q', '').strip()
+
     deals = Deal.objects.select_related(
         'company',
         'contact'
-    ).all().order_by('-created_at')
+    ).all()
+
+    if query:
+        deals = deals.filter(
+            Q(title__icontains=query) |
+            Q(company__name__icontains=query) |
+            Q(contact__name__icontains=query)
+        )
+
+    deals = deals.order_by('-created_at')
 
     stages = Deal.STAGE_CHOICES
     columns = []
 
     for stage_code, stage_label in stages:
         stage_deals = deals.filter(stage=stage_code)
+
         columns.append({
             'code': stage_code,
             'label': stage_label,
@@ -32,6 +47,7 @@ def deal_list(request):
         'deals': deals,
         'columns': columns,
         'stages': stages,
+        'query': query,
         'open_deals_count': deals.exclude(
             stage__in=['won', 'lost']
         ).count(),
@@ -40,6 +56,7 @@ def deal_list(request):
     }
 
     return render(request, 'deals/deal_list.html', context)
+
 
 @login_required
 @require_POST

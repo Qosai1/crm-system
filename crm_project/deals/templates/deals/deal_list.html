@@ -9,17 +9,17 @@
 
 {% block content %}
 
-<div class="container">
+<div class="deals-page">
 
     <div class="page-header">
     <h1>Deals</h1>
 
     <div class="header-actions">
-        <form method="GET" action="{% url 'company_list' %}" class="search-form">
+        <form method="GET" action="{% url 'deal_list' %}" class="search-form">
             <input
                 type="search"
                 name="q"
-                placeholder="Search companies..."
+                placeholder="Search deal..."
                 value="{{ request.GET.q|default:'' }}"
             >
         </form>

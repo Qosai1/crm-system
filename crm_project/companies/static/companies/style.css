@@ -1,16 +1,15 @@
-
-*{
+* {
     box-sizing: border-box;
 }
 
-body{
+body {
     margin: 0;
-    font-family: Arial,sans-serif;
+    font-family: Arial, sans-serif;
     background-color: #f5f7fb;
     color: #1f2937;
 }
 
-.container{
+.container {
     margin: 24px auto;
     padding: 0 14px;
 }
@@ -81,14 +80,10 @@ body{
     background: #4338ca;
 }
 
-
-
 .companies-table th,
-.companies-table td{
+.companies-table td {
     padding: 12px;
 }
-
-
 
 .table-card {
     background-color: white;
@@ -103,6 +98,7 @@ body{
     border-collapse: collapse;
     text-align: left;
 }
+
 .companies-table tbody td:first-child {
     font-weight: bold;
 }
@@ -146,8 +142,6 @@ body{
     gap: 12px;
     margin-left: auto;
 }
-
-
 
 /* Add Company Form */
 
@@ -200,7 +194,7 @@ body{
     gap: 12px;
     margin-top: 28px;
     padding-top: 24px;
-  
+
 }
 
 .btn-cancel {
@@ -230,10 +224,10 @@ body{
     font-size: 14px;
     cursor: pointer;
 }
+
 .btn-save:hover {
     background: #102142;
 }
-
 
 /* Center and limit the Company Form */
 
@@ -260,13 +254,15 @@ body{
 }
 
 
-.contact-name-link{
+.contact-name-link {
     text-decoration: none;
 }
-.contact-name-link:hover{
+
+.contact-name-link:hover {
     text-decoration: underline;
 }
-.btn-edit{
+
+.btn-edit {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -286,17 +282,15 @@ body{
     vertical-align: middle;
 }
 
- .btn-edit {
+.btn-edit {
     color: #1d4ed8;
     background-color: #eff6ff;
 }
 
 
- .btn-edit:hover {
+.btn-edit:hover {
     background-color: #dbeafe;
 }
-
-
 
 .company-name-link {
     color: #2563eb;
@@ -309,9 +303,7 @@ body{
     text-decoration: underline;
 }
 
-
-
-   /* COMPANY DETAILS PAGE */
+/* COMPANY DETAILS PAGE */
 
 .company-detail-page {
     max-width: 1200px;
@@ -400,8 +392,6 @@ body{
 .detail-action-btn:hover {
     background: #f3f4f6;
 }
-
-
 
 .company-detail-layout {
     display: grid;
@@ -492,7 +482,7 @@ body{
     padding-bottom: 0;
 }
 
-.company-contact-row > div {
+.company-contact-row>div {
     min-width: 0;
 }
 
@@ -508,7 +498,7 @@ body{
     overflow-wrap: anywhere;
 }
 
-.company-contact-row > span {
+.company-contact-row>span {
     color: #6b7280;
     font-size: 12px;
     text-align: right;
@@ -539,11 +529,11 @@ body{
     border-bottom: none;
 }
 
-.company-info-row > span {
+.company-info-row>span {
     color: #6b7280;
 }
 
-.company-info-row > strong {
+.company-info-row>strong {
     min-width: 0;
     color: #374151;
     font-weight: 500;
@@ -560,7 +550,6 @@ body{
 .company-info-row a:hover {
     text-decoration: underline;
 }
-
 
 /* Deal Tasks Section */
 .deal-tasks-list {
@@ -619,7 +608,6 @@ body{
     white-space: nowrap;
 }
 
-
 .deal-task-row form {
     margin: 0;
 }
@@ -657,7 +645,7 @@ body{
 }
 
 
-   /* RESPONSIVE DESIGN */
+/* RESPONSIVE DESIGN */
 
 /* Tablets and small laptops */
 @media (max-width: 992px) {
@@ -686,7 +674,6 @@ body{
         padding: 30px 18px;
     }
 }
-
 
 /* Tablets and mobile */
 @media (max-width: 768px) {
@@ -780,7 +767,6 @@ body{
         padding: 18px;
     }
 }
-
 
 /* Mobile phones */
 @media (max-width: 480px) {
@@ -876,7 +862,7 @@ body{
         gap: 6px;
     }
 
-    .company-info-row > strong {
+    .company-info-row>strong {
         text-align: left;
     }
 
@@ -885,7 +871,7 @@ body{
         align-items: flex-start;
     }
 
-    .company-contact-row > span {
+    .company-contact-row>span {
         text-align: left;
     }
 

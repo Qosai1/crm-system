@@ -25,28 +25,42 @@ def seed_demo():
     today = timezone.localdate()
 
     # -------------------------
+    # 0. Delete old data
+    # -------------------------
+
+    Task.objects.all().delete()
+    Deal.objects.all().delete()
+    Contact.objects.all().delete()
+    Company.objects.all().delete()
+
+    print("Old data deleted successfully!")
+
+    # -------------------------
     # 1. Companies
     # -------------------------
 
     companies_data = [
-        ("TechNova Solutions", "Software", "Tel Aviv"),
-        ("GreenLeaf Foods", "Food & Beverage", "Haifa"),
-        ("BlueWave Logistics", "Logistics", "Ashdod"),
-        ("MediCare Plus", "Healthcare", "Jerusalem"),
-        ("BuildRight Construction", "Construction", "Beer Sheva"),
-        ("Smart Retail Ltd", "Retail", "Nazareth"),
+        ("TechNova Solutions", "Software", "Tel Aviv", "0501234567", "info@technova.com"),
+        ("GreenLeaf Foods", "Food & Beverage", "Haifa", "0502345678", "info@greenleaf.com"),
+        ("BlueWave Logistics", "Logistics", "Ashdod", "0503456789", "info@bluewave.com"),
+        ("MediCare Plus", "Healthcare", "Jerusalem", "0504567890", "info@medicareplus.com"),
+        ("BuildRight Construction", "Construction", "Beer Sheva", "0505678901", "info@buildright.com"),
+        ("Smart Retail Ltd", "Retail", "Nazareth", "0506789012", "info@smartretail.com"),
     ]
 
     companies = {}
 
-    for name, industry, city in companies_data:
+    for name, industry, city, phone, email in companies_data:
         company, _ = Company.objects.get_or_create(
             name=name,
             defaults={
                 "industry": industry,
                 "city": city,
+                "phone": phone,
+                "email": email,
             }
         )
+
         companies[name] = company
 
     # -------------------------
@@ -78,6 +92,7 @@ def seed_demo():
                 "phone": phone,
             }
         )
+
         contacts[name] = contact
 
     # -------------------------
@@ -112,6 +127,7 @@ def seed_demo():
                 "assigned_to": assigned_user,
             }
         )
+
         deals[title] = deal
 
     # -------------------------
@@ -153,6 +169,7 @@ def seed_demo():
     for title, deal_title, contact_name, priority, days, completed, description in tasks_data:
 
         task_date = today + timedelta(days=days)
+
         due_date = timezone.make_aware(
             datetime.combine(task_date, time(10, 0))
         )
@@ -169,7 +186,7 @@ def seed_demo():
             }
         )
 
-    print("Demo data created successfully!")
+    print("\nDemo data created successfully!")
     print(f"Companies: {Company.objects.count()}")
     print(f"Contacts: {Contact.objects.count()}")
     print(f"Deals: {Deal.objects.count()}")

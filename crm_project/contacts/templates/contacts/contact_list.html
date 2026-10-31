@@ -16,11 +16,11 @@
     <h1>Contacts</h1>
 
     <div class="header-actions">
-        <form method="GET" action="{% url 'company_list' %}" class="search-form">
+        <form method="GET" action="{% url 'contact_list' %}" class="search-form">
             <input
                 type="search"
                 name="q"
-                placeholder="Search companies..."
+                placeholder="Search contact..."
                 value="{{ request.GET.q|default:'' }}"
             >
         </form>

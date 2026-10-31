@@ -1,6 +1,5 @@
 import json
 from datetime import datetime, time, timedelta
-
 from companies.models import Company
 from contacts.models import Contact
 from deals.models import Deal

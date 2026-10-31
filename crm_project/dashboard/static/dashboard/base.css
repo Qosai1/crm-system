@@ -155,7 +155,6 @@ button:hover {
     }
 }
 
-
 /* Mobile */
 @media (max-width: 768px) {
 
@@ -199,7 +198,6 @@ button:hover {
         padding: 10px;
     }
 }
-
 
 /* Small Mobile */
 @media (max-width: 480px) {
